@@ -26,6 +26,10 @@ public class RepositorioFornecedorArray implements IRepositorioFornecedor {
 	public boolean remover(double codigo){
 		Fornecedor newFornecedores[] = new Fornecedor[this.fornecedores.length - 1];
 		int x = 0;
+		
+		if(this.procurar(codigo) == null){
+			return false;
+		}
 		for(int i = 0; i < this.fornecedores.length; i++){
 			if(this.fornecedores[i].getCodigo() != codigo){
 				newFornecedores[x++] = this.fornecedores[i];

@@ -6,7 +6,7 @@ import br.aeso.exercicio.fachada.Fachada;
 
 public class TelaCadastroFornecedor {
 	private static Scanner teclado = new Scanner(System.in);
-	public static void main(String args[]){
+	public static void main(String args[]) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException{
 		Fachada fachada = new Fachada();
 		Fornecedor fornecedor = TelaCadastroFornecedor.cadastrarFornecedor();
 		fachada.cadastrarFornecedor(fornecedor);

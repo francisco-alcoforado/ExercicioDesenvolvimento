@@ -5,7 +5,7 @@ import br.aeso.exercicio.fachada.Fachada;
 
 public class TelaCadastroCliente {
 	private static Scanner teclado = new Scanner(System.in);
-	public static void main(String args[]){
+	public static void main(String args[]) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException{
 		Fachada fachada = new Fachada();
 		Cliente cliente = TelaCadastroCliente.cadastrarCliente();
 		fachada.cadastrarCliente(cliente);

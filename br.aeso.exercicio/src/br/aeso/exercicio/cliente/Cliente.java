@@ -32,6 +32,6 @@ public class Cliente {
 		return "Cliente [codigo=" + codigo + ", nome=" + nome + ", cpf=" + cpf + "]";
 	}
 	public String getCpfFormatado(){
-		return this.cpf;
+		return String.format("xxx.xxx.xxx-xx", this.cpf);
 	}
 }

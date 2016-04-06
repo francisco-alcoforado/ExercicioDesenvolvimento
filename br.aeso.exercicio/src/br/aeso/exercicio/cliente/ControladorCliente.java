@@ -2,9 +2,12 @@ package br.aeso.exercicio.cliente;
 
 import java.util.ArrayList;
 
+import br.aeso.exercicio.util.ValidarCPF;
+
 public class ControladorCliente {
 	private IRepositorioCliente repositorio;
 	public ControladorCliente() {
+		this.repositorio = new RepositorioClienteArray();
 	}
 	public IRepositorioCliente getRepositorio() {
 		return repositorio;
@@ -13,19 +16,39 @@ public class ControladorCliente {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(Cliente cliente){
+	public void cadastrar(Cliente cliente) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException{
+		if(cliente == null){
+			throw new IllegalArgumentException();
+		}
+		if(this.procurar(cliente.getCodigo()) != null){
+			throw new ClienteJaCadastradoException();
+		}
+		if(ValidarCPF.CPF(cliente.getCpf()) == false){
+			throw new CPFInvalidoException();
+		}
 		//Imprimir as informações do cliente.
-		this.repositorio = new RepositorioClienteArray();
 		this.repositorio.cadastrar(cliente);
 	}
-	public void atualizar(Cliente cliente){
+	public void atualizar(Cliente cliente) throws CPFInvalidoException{
+		if(ValidarCPF.CPF(cliente.getCpf()) == false){
+			throw new CPFInvalidoException();
+		}
+		this.repositorio.atualizar(cliente);
+	}
+	public boolean remover(String codigo) throws ClienteNaoExncontradoException{
+		boolean retorno = this.remover(codigo);
+		if(retorno == false){
+			throw new ClienteNaoExncontradoException();
+		}else{
+			return true;
+		}
+	}
+	public Cliente procurar(String codigo) throws ClienteNaoExncontradoException{
+		Cliente cliente = this.repositorio.procurar(Double.parseDouble(codigo));
+		if(cliente == null){
+			throw new ClienteNaoExncontradoException();
+		}
 		
-	}
-	public boolean remover(String codigo){
-		return false;
-	}
-	public Cliente procurar(String codigo){
-		Cliente cliente = new Cliente("", "", "");
 		return cliente;
 	}
 	public ArrayList<Cliente> listar(){

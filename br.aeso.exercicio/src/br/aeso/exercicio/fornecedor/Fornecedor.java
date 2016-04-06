@@ -3,14 +3,14 @@ package br.aeso.exercicio.fornecedor;
 public class Fornecedor {
 	private int codigo;
 	private String nome;
-	private String cpf;
+	private String cnpj;
 	private String Banco;
 	private Endereco endereco;
-	public Fornecedor(int codigo, String nome, String cpf, String banco, Endereco endereco) {
+	public Fornecedor(int codigo, String nome, String cnpj, String banco, Endereco endereco) {
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
-		this.cpf = cpf;
+		this.cnpj = cnpj;
 		Banco = banco;
 		this.endereco = endereco;
 	}
@@ -26,11 +26,11 @@ public class Fornecedor {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getCpf() {
-		return cpf;
+	public String getCnpj() {
+		return this.cnpj;
 	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setCpf(String cnpj) {
+		this.cnpj = cnpj;
 	}
 	public String getBanco() {
 		return Banco;
@@ -46,10 +46,10 @@ public class Fornecedor {
 	}
 	@Override
 	public String toString() {
-		return "Fornecedor [codigo=" + codigo + ", nome=" + nome + ", cpf=" + cpf + ", Banco=" + Banco + ", endereco="
+		return "Fornecedor [codigo=" + codigo + ", nome=" + nome + ", cpf=" + cnpj + ", Banco=" + Banco + ", endereco="
 				+ endereco.toString() + "]";
 	}
 	public String getCpfFormatado(){
-		return this.cpf;
+		return String.format("xx.xxx.xxx/xxxx-xx", this.cnpj);
 	}
 }

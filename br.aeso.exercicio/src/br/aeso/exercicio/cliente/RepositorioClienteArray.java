@@ -1,6 +1,5 @@
 package br.aeso.exercicio.cliente;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +27,11 @@ public class RepositorioClienteArray implements IRepositorioCliente{
 	public boolean remover(double codigo){
 		Cliente newClientes[] = new Cliente[this.clientes.length - 1];
 		int x = 0;
+		
+		if(this.procurar(codigo) == null){
+			return false;
+		}
+		
 		for(int i = 0; i < this.clientes.length; i++){
 			double dbCodigo = Double.parseDouble(this.clientes[i].getCodigo());
 			if(dbCodigo != codigo){
