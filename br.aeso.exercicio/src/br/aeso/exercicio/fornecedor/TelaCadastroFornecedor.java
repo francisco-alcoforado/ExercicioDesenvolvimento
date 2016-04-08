@@ -9,7 +9,11 @@ public class TelaCadastroFornecedor {
 	public static void main(String args[]) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException{
 		Fachada fachada = new Fachada();
 		Fornecedor fornecedor = TelaCadastroFornecedor.cadastrarFornecedor();
-		fachada.cadastrarFornecedor(fornecedor);
+		try{
+			fachada.cadastrarFornecedor(fornecedor);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 	public static Fornecedor cadastrarFornecedor(){
 		System.out.println("Cadastro de CLiente: ");

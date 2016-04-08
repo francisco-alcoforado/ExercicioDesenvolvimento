@@ -8,7 +8,12 @@ public class TelaCadastroCliente {
 	public static void main(String args[]) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException{
 		Fachada fachada = new Fachada();
 		Cliente cliente = TelaCadastroCliente.cadastrarCliente();
-		fachada.cadastrarCliente(cliente);
+		try{
+			fachada.cadastrarCliente(cliente);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		
 	}
 	public static Cliente cadastrarCliente(){
 		System.out.println("Cadastro de CLiente: ");
