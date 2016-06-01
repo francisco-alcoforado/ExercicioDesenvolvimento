@@ -3,6 +3,7 @@ package br.aeso.exercicio.fornecedor;
 import java.util.Scanner;
 
 import br.aeso.exercicio.fachada.Fachada;
+import br.aeso.exercicio.util.CNPJInvalidoException;
 
 public class TelaCadastroFornecedor {
 	private static Scanner teclado = new Scanner(System.in);

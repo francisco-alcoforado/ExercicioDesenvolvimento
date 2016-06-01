@@ -2,6 +2,7 @@ package br.aeso.exercicio.fornecedor;
 
 import java.util.ArrayList;
 
+import br.aeso.exercicio.util.CNPJInvalidoException;
 import br.aeso.exercicio.util.ValidarCNPJ;
 
 public class ControladorFornecedor {

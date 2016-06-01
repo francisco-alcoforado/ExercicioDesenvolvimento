@@ -2,11 +2,12 @@ package br.aeso.exercicio.fachada;
 
 import java.util.ArrayList;
 import br.aeso.exercicio.cliente.*;
-import br.aeso.exercicio.fornecedor.CNPJInvalidoException;
 import br.aeso.exercicio.fornecedor.ControladorFornecedor;
 import br.aeso.exercicio.fornecedor.Fornecedor;
 import br.aeso.exercicio.fornecedor.FornecedorJaCadastradoException;
 import br.aeso.exercicio.fornecedor.FornecedorNaoEncontradoException;
+import br.aeso.exercicio.util.CNPJInvalidoException;
+import br.aeso.exercicio.util.CPFInvalidoException;
 
 public class Fachada {
 	private ControladorCliente controladorCliente;
@@ -38,12 +39,12 @@ public class Fachada {
 		this.controladorCliente = new ControladorCliente();
 		this.controladorCliente.atualizar(cliente);
 	}
-	public boolean removerCliente(String codigo) throws ClienteNaoExncontradoException{
+	public boolean removerCliente(int codigo) throws ClienteNaoExncontradoException{
 		this.controladorCliente = new ControladorCliente();
 		boolean retorno = this.controladorCliente.remover(codigo);
 		return retorno;
 	}
-	public Cliente procurarCliente(String codigo) throws ClienteNaoExncontradoException{
+	public Cliente procurarCliente(int codigo) throws ClienteNaoExncontradoException{
 		this.controladorCliente = new ControladorCliente();
 		Cliente cliente = this.controladorCliente.procurar(codigo);
 		return cliente;

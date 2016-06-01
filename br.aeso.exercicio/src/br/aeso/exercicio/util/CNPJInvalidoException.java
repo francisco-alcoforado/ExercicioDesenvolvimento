@@ -1,4 +1,4 @@
-package br.aeso.exercicio.fornecedor;
+package br.aeso.exercicio.util;
 
 public class CNPJInvalidoException extends Exception{
 

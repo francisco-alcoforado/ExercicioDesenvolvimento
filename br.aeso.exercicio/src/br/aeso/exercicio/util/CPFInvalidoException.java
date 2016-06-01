@@ -1,4 +1,4 @@
-package br.aeso.exercicio.cliente;
+package br.aeso.exercicio.util;
 
 public class CPFInvalidoException extends Exception{
 

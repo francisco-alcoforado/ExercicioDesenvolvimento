@@ -2,6 +2,7 @@ package br.aeso.exercicio.cliente;
 
 import java.util.ArrayList;
 
+import br.aeso.exercicio.util.CPFInvalidoException;
 import br.aeso.exercicio.util.ValidarCPF;
 
 public class ControladorCliente {
@@ -35,16 +36,16 @@ public class ControladorCliente {
 		}
 		this.repositorio.atualizar(cliente);
 	}
-	public boolean remover(String codigo) throws ClienteNaoExncontradoException{
-		boolean retorno = this.remover(codigo);
+	public boolean remover(int codigo) throws ClienteNaoExncontradoException{
+		boolean retorno = this.repositorio.remover(codigo);
 		if(retorno == false){
 			throw new ClienteNaoExncontradoException();
 		}else{
 			return true;
 		}
 	}
-	public Cliente procurar(String codigo) throws ClienteNaoExncontradoException{
-		Cliente cliente = this.repositorio.procurar(Double.parseDouble(codigo));
+	public Cliente procurar(int codigo) throws ClienteNaoExncontradoException{
+		Cliente cliente = this.repositorio.procurar(codigo);
 		if(cliente == null){
 			throw new ClienteNaoExncontradoException();
 		}

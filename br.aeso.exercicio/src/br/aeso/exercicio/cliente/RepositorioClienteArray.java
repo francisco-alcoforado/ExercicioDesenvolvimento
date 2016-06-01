@@ -18,7 +18,7 @@ public class RepositorioClienteArray implements IRepositorioCliente{
 	}
 	public void atualizar(Cliente cliente){
 		for(int i = 0; i < this.clientes.length; i++){
-			if(this.clientes[i].getCodigo().equals(cliente.getCodigo())){
+			if(this.clientes[i].getCodigo() == cliente.getCodigo()){
 				this.clientes[i] = cliente;
 				break;
 			}
@@ -33,7 +33,7 @@ public class RepositorioClienteArray implements IRepositorioCliente{
 		}
 		
 		for(int i = 0; i < this.clientes.length; i++){
-			double dbCodigo = Double.parseDouble(this.clientes[i].getCodigo());
+			double dbCodigo = this.clientes[i].getCodigo();
 			if(dbCodigo != codigo){
 				newClientes[x++] = this.clientes[i];
 			}
@@ -42,7 +42,7 @@ public class RepositorioClienteArray implements IRepositorioCliente{
 	}
 	public Cliente procurar(double codigo){
 		for(int i = 0; i < this.clientes.length; i++){
-			double dbCodigo = Double.parseDouble(this.clientes[i].getCodigo());
+			double dbCodigo = this.clientes[i].getCodigo();
 			if(dbCodigo == codigo){
 				return this.clientes[i];
 			}

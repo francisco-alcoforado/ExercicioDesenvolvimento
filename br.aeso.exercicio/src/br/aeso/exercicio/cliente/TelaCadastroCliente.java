@@ -2,6 +2,7 @@ package br.aeso.exercicio.cliente;
 
 import java.util.Scanner;
 import br.aeso.exercicio.fachada.Fachada;
+import br.aeso.exercicio.util.CPFInvalidoException;
 
 public class TelaCadastroCliente {
 	private static Scanner teclado = new Scanner(System.in);
@@ -18,7 +19,7 @@ public class TelaCadastroCliente {
 	public static Cliente cadastrarCliente(){
 		System.out.println("Cadastro de CLiente: ");
 		System.out.println("Insira o codigo: ");
-		String codigo = teclado.nextLine();
+		int codigo = teclado.nextInt();
 		System.out.println("Insira o Nome: ");
 		String nome = teclado.nextLine();
 		System.out.println("Insira o cpf: ");

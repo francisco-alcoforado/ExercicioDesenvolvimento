@@ -1,18 +1,18 @@
 package br.aeso.exercicio.cliente;
 
 public class Cliente {
-	private String codigo;
+	private int codigo;
 	private String nome;
 	private String cpf;
-	public Cliente(String codigo, String nome, String cpf) {
+	public Cliente(int codigo, String nome, String cpf) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.cpf = cpf;
 	}
-	public String getCodigo() {
+	public int getCodigo() {
 		return codigo;
 	}
-	public void setCodigo(String codigo) {
+	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
 	public String getNome() {
