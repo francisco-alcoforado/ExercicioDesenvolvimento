@@ -1,4 +1,4 @@
-package br.aeso.notaFiscal;
+package br.aeso.exercicio.notaFiscal;
 
 import java.util.ArrayList;
 import java.util.HashMap;

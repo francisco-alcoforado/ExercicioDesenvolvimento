@@ -1,4 +1,4 @@
-package br.aeso.notaFiscal;
+package br.aeso.exercicio.notaFiscal;
 
 public class NotaFiscalJaCadastradaException extends Exception{
 
