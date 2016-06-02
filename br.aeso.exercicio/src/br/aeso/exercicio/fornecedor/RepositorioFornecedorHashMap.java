@@ -1,13 +1,22 @@
 package br.aeso.exercicio.fornecedor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioFornecedorHashMap implements IRepositorioFornecedor{
-	HashMap<Integer, Fornecedor> fornecedores = new HashMap<Integer, Fornecedor>();
-	
-	public RepositorioFornecedorHashMap() {
-		// TODO Auto-generated constructor stub
+	HashMap<Integer, Fornecedor> fornecedores;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioFornecedorHashMap() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.fornecedores = new HashMap<Integer, Fornecedor>();
+		}else{
+			this.fornecedores = (HashMap<Integer, Fornecedor>) arquivos.getValores(file);
+		}
 	}
 
 	public void cadastrar(Fornecedor fornecedor){

@@ -1,13 +1,21 @@
 package br.aeso.exercicio.notaFiscal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioNotaFiscalArray implements IRepositorioNotaFiscal{
 	NotaFiscal notaFiscals[] =  new NotaFiscal[1];
-	
-	public RepositorioNotaFiscalArray() {
-		// TODO Auto-generated constructor stub
+	private String file = "";
+	public RepositorioNotaFiscalArray() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.notaFiscals = new NotaFiscal[1];
+		}else{
+			this.notaFiscals = (NotaFiscal[]) arquivos.getArray(file);
+		}
 	}
 	public void cadastrar(NotaFiscal notaFiscal){
 		//Imprimir dados do cliente a ser cadastrado

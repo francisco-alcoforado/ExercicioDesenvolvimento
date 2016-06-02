@@ -1,12 +1,21 @@
 package br.aeso.exercicio.pedido;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioPedidoArray implements IRepositorioPedido{
-	Pedido pedidos[] =  new Pedido[1];
-	public RepositorioPedidoArray() {
-		// TODO Auto-generated constructor stub
+	Pedido pedidos[];
+	private String file = "";
+	public RepositorioPedidoArray() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.pedidos = new Pedido[1];
+		}else{
+			this.pedidos = (Pedido[]) arquivos.getArray(file);
+		}
 	}
 	public void cadastrar(Pedido pedido){
 		//Imprimir dados do cliente a ser cadastrad
@@ -46,6 +55,18 @@ public class RepositorioPedidoArray implements IRepositorioPedido{
 	}
 	public ArrayList<Pedido> listar(){
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>(Arrays.asList(this.pedidos));
+		return pedidos;
+	}
+	public ArrayList<Pedido> procurar(int codigoNotaFiscal){
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		for(Pedido pedido : this.pedidos){
+			if(pedido.getCodigoNotaFiscal() == codigoNotaFiscal){
+				pedidos.add(pedido);
+			}
+		}
+		if(pedidos.isEmpty()){
+			return null;
+		}
 		return pedidos;
 	}
 }

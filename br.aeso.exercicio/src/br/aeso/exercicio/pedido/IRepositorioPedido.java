@@ -8,4 +8,5 @@ public interface IRepositorioPedido {
 	public boolean remover(double codigo);
 	public Pedido procurar(double codigo);
 	public ArrayList<Pedido> listar();
+	public ArrayList<Pedido> procurar(int codigoNotaFiscal);
 }

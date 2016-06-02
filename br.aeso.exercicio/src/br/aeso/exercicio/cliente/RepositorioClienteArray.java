@@ -1,12 +1,21 @@
 package br.aeso.exercicio.cliente;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioClienteArray implements IRepositorioCliente{
-	Cliente clientes[] =  new Cliente[1];
-	public RepositorioClienteArray() {
-		// TODO Auto-generated constructor stub
+	Cliente clientes[];
+	private String file = "";
+	public RepositorioClienteArray() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.clientes = new Cliente[1];
+		}else{
+			this.clientes = (Cliente[]) arquivos.getArray(file);
+		}
 	}
 	
 	public void cadastrar(Cliente cliente){

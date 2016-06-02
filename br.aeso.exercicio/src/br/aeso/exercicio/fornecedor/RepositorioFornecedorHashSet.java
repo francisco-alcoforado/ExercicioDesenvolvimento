@@ -1,12 +1,25 @@
 package br.aeso.exercicio.fornecedor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioFornecedorHashSet implements IRepositorioFornecedor{
 	HashSet<Fornecedor> fornecedores = new HashSet<Fornecedor>();
-	
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioFornecedorHashSet() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.fornecedores = new HashSet<Fornecedor>();
+		}else{
+			this.fornecedores = (HashSet<Fornecedor>) arquivos.getValores(file);
+		}
+	}
+
 	public void cadastrar(Fornecedor fornecedor){
 		if(this.fornecedores.contains(fornecedor)){
 			return;

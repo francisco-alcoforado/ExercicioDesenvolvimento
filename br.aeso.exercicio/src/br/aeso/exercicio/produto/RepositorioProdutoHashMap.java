@@ -1,13 +1,22 @@
 package br.aeso.exercicio.produto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioProdutoHashMap implements IRepositorioProduto{
-	HashMap<Integer, Produto> produtos = new HashMap<Integer, Produto>();
-	
-	public RepositorioProdutoHashMap() {
-		// TODO Auto-generated constructor stub
+	HashMap<Integer, Produto> produtos;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioProdutoHashMap() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.produtos = new HashMap<Integer, Produto>();
+		}else{
+			this.produtos = (HashMap<Integer, Produto>) arquivos.getValores(file);
+		}
 	}
 
 	public void cadastrar(Produto produto){

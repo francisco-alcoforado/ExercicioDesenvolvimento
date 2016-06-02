@@ -1,13 +1,21 @@
 package br.aeso.exercicio.notaFiscal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class ContraladorNotaFiscal {
+public class ControladorNotaFiscal {
 	private IRepositorioNotaFiscal repositorio;
 	
-	public ContraladorNotaFiscal(IRepositorioNotaFiscal repositorio) {
-		super();
-		this.repositorio = repositorio;
+	public ControladorNotaFiscal(String type) throws ClassNotFoundException, IOException {
+		if(type.equals("array")){
+			this.repositorio = new RepositorioNotaFiscalArray();
+		}else if(type.equals("ArrayList")){
+			this.repositorio = new RepositorioNotaFiscalArrayList();
+		}else if(type.equals("HashMap")){
+			this.repositorio = new RepositorioNotaFiscalHashMap();
+		}else if(type.equals("HashSet")){
+			this.repositorio = new RepositorioNotaFiscalHashSet();
+		}
 	}
 	
 	public IRepositorioNotaFiscal getRepositorio() {

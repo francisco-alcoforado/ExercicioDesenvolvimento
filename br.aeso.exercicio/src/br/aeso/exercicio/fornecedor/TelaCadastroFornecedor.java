@@ -8,7 +8,7 @@ import br.aeso.exercicio.util.CNPJInvalidoException;
 public class TelaCadastroFornecedor {
 	private static Scanner teclado = new Scanner(System.in);
 	public static void main(String args[]) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException{
-		Fachada fachada = new Fachada();
+		Fachada fachada = new Fachada("ArrayList");
 		Fornecedor fornecedor = TelaCadastroFornecedor.cadastrarFornecedor();
 		try{
 			fachada.cadastrarFornecedor(fornecedor);

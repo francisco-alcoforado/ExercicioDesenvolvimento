@@ -1,14 +1,21 @@
 package br.aeso.exercicio.produto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioProdutoArray implements IRepositorioProduto{
 	Produto produtos[] =  new Produto[1];
-	
-	public RepositorioProdutoArray() {
-		super();
-		// TODO Auto-generated constructor stub
+	private String file = "";
+	public RepositorioProdutoArray() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.produtos = new Produto[1];
+		}else{
+			this.produtos = (Produto[]) arquivos.getArray(file);
+		}
 	}
 	public void cadastrar(Produto produto){
 		//Imprimir dados do cliente a ser cadastrado

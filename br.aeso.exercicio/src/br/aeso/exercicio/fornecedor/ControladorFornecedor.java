@@ -1,5 +1,6 @@
 package br.aeso.exercicio.fornecedor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import br.aeso.exercicio.util.CNPJInvalidoException;
@@ -7,9 +8,19 @@ import br.aeso.exercicio.util.ValidarCNPJ;
 
 public class ControladorFornecedor {
 	private IRepositorioFornecedor repositorio;
-	public ControladorFornecedor() {
-		this.repositorio = new RepositorioFornecedorArray();
+	
+	public ControladorFornecedor(String type) throws ClassNotFoundException, IOException {
+		if(type.equals("array")){
+			this.repositorio = new RepositorioFornecedorArray();
+		}else if(type.equals("ArrayList")){
+			this.repositorio = new RepositorioFornecedorArrayList();
+		}else if(type.equals("HashMap")){
+			this.repositorio = new RepositorioFornecedorHashMap();
+		}else if(type.equals("HashSet")){
+			this.repositorio = new RepositorioFornecedorHashSet();
+		}
 	}
+	
 	public IRepositorioFornecedor getRepositorio() {
 		return repositorio;
 	}

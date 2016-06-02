@@ -1,12 +1,21 @@
 package br.aeso.exercicio.fornecedor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioFornecedorArrayList implements IRepositorioFornecedor{
-	private ArrayList<Fornecedor> fornecedores = new ArrayList<Fornecedor>();
-	
-	public RepositorioFornecedorArrayList() {
-		// TODO Auto-generated constructor stub
+	private ArrayList<Fornecedor> fornecedores;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioFornecedorArrayList() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.fornecedores = new ArrayList<Fornecedor>();
+		}else{
+			this.fornecedores = (ArrayList<Fornecedor>) arquivos.getValores(file);
+		}
 	}
 	
 	public void cadastrar(Fornecedor fornecedor){

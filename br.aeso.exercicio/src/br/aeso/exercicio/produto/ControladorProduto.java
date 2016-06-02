@@ -1,12 +1,21 @@
 package br.aeso.exercicio.produto;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ControladorProduto {
 	private IRepositorioProduto repositorio;
 	
-	public ControladorProduto(IRepositorioProduto repositorio) {
-		this.repositorio = repositorio;
+	public ControladorProduto(String type) throws ClassNotFoundException, IOException {
+		if(type.equals("array")){
+			this.repositorio = new RepositorioProdutoArray();
+		}else if(type.equals("ArrayList")){
+			this.repositorio = new RepositorioProdutoArrayList();
+		}else if(type.equals("HashMap")){
+			this.repositorio = new RepositorioProdutoHashMap();
+		}else if(type.equals("HashSet")){
+			this.repositorio = new RepositorioProdutoHashSet();
+		}
 	}
 	
 	public IRepositorioProduto getRepositorio() {

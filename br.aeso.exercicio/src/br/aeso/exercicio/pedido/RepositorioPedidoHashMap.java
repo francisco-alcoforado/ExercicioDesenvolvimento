@@ -1,13 +1,22 @@
 package br.aeso.exercicio.pedido;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioPedidoHashMap implements IRepositorioPedido{
-	HashMap<Integer, Pedido> pedidos = new HashMap<Integer, Pedido>();
-	
-	public RepositorioPedidoHashMap() {
-		// TODO Auto-generated constructor stub
+	HashMap<Integer, Pedido> pedidos;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioPedidoHashMap() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.pedidos = new HashMap<Integer, Pedido>();
+		}else{
+			this.pedidos = (HashMap<Integer, Pedido>) arquivos.getValores(file);
+		}
 	}
 
 	public void cadastrar(Pedido pedido){
@@ -53,5 +62,18 @@ public class RepositorioPedidoHashMap implements IRepositorioPedido{
 			this.cadastrar(pedido);
 		}
 		this.pedidos.replace(pedido.getCodigo(), pedido);
+	}
+	public ArrayList<Pedido> procurar(int codigoNotaFiscal){
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
+		ArrayList<Pedido> todos = this.listar();
+		for(Pedido pedido : todos){
+			if(pedido.getCodigoNotaFiscal() == codigoNotaFiscal){
+				pedidos.add(pedido);
+			}
+		}
+		if(pedidos.isEmpty()){
+			return null;
+		}
+		return pedidos;
 	}
 }

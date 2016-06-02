@@ -1,15 +1,23 @@
 package br.aeso.exercicio.notaFiscal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
 import br.aeso.exercicio.fornecedor.Fornecedor;
 
 public class RepositorioNotaFiscalHashMap implements IRepositorioNotaFiscal{
-	HashMap<Integer, NotaFiscal> notaFiscals = new HashMap<Integer, NotaFiscal>();
-	
-	public RepositorioNotaFiscalHashMap() {
-		// TODO Auto-generated constructor stub
+	HashMap<Integer, NotaFiscal> notaFiscals;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioNotaFiscalHashMap() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.notaFiscals = new HashMap<Integer, NotaFiscal>();
+		}else{
+			this.notaFiscals = (HashMap<Integer, NotaFiscal>) arquivos.getValores(file);
+		}
 	}
 
 	public void cadastrar(NotaFiscal notaFiscal){

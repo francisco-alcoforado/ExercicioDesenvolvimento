@@ -2,38 +2,31 @@ package br.aeso.exercicio.pedido;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import br.aeso.exercicio.arquivos.ArquivosManager;
 
-public class RepositorioPedidoArrayList implements IRepositorioPedido{
-	private ArrayList<Pedido> pedidos;
+public class RepositorioPedidoHashSet implements IRepositorioPedido{
+	HashSet<Pedido> pedidos = new HashSet<Pedido>();
 	private String file = "";
 	@SuppressWarnings("unchecked")
-	public RepositorioPedidoArrayList() throws ClassNotFoundException, IOException {
+	public RepositorioPedidoHashSet() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
 		if(arquivos.exists(file)){
-			this.pedidos = new ArrayList<Pedido>();
+			this.pedidos = new HashSet<Pedido>();
 		}else{
-			this.pedidos = (ArrayList<Pedido>) arquivos.getValores(file);
+			this.pedidos = (HashSet<Pedido>) arquivos.getValores(file);
 		}
 	}
+
 	public void cadastrar(Pedido pedido){
 		if(this.pedidos.contains(pedido)){
 			return;
 		}
 		this.pedidos.add(pedido);
 	}
-	public ArrayList<Pedido> listar(){
-		return this.pedidos;
-	}
-	public boolean remover(Pedido pedido){
-		int index = this.pedidos.indexOf(pedido);
-		if(index == -1){
-			return false;
-		}
-		this.pedidos.remove(index);
-		return true;
-	}
+	
 	public boolean remover(double codigo){
 		for(Pedido pedido : this.pedidos){
 			if(pedido.getCodigo() == codigo){
@@ -42,6 +35,18 @@ public class RepositorioPedidoArrayList implements IRepositorioPedido{
 			}
 		}
 		return false;
+	}
+	public boolean remover(Pedido pedido){
+		if(!this.pedidos.contains(pedido)){
+			return false;
+		}
+		return this.pedidos.remove(pedido);
+	}
+	
+	public ArrayList<Pedido> listar(){
+		ArrayList<Pedido> pedidos = new ArrayList<Pedido>(Arrays.asList((Pedido[])this.pedidos.toArray()));
+		return pedidos;
+		
 	}
 	public Pedido procurar(double codigo){
 		for(Pedido pedido : this.pedidos){
@@ -55,17 +60,25 @@ public class RepositorioPedidoArrayList implements IRepositorioPedido{
 		if(!this.pedidos.contains(pedido)){
 			return null;
 		}
-		int index = this.pedidos.indexOf(pedido);
-		return this.pedidos.get(index);
+		for(Pedido forn : this.pedidos){
+			if(forn.equals(pedido)){
+				return forn;
+			}
+		}
+		return null;
 	}
 	public void atualizar(Pedido pedido){
 		if(!this.pedidos.contains(pedido)){
 			this.cadastrar(pedido);
 		}
-		int index = this.pedidos.indexOf(pedido);
-		this.pedidos.set(index, pedido);
+		for(Pedido pedido2 : this.pedidos){
+			if(pedido2.getCodigo() == pedido.getCodigo()){
+				this.pedidos.remove(pedido2);
+				this.pedidos.add(pedido);
+			}
+		}
 	}
-	public ArrayList<Pedido> procurar(int codigoNotaFiscal){
+	public ArrayList<br.aeso.exercicio.pedido.Pedido> procurar(int codigoNotaFiscal) {
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 		for(Pedido pedido : this.pedidos){
 			if(pedido.getCodigoNotaFiscal() == codigoNotaFiscal){

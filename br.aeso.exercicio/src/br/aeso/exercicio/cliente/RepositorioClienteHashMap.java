@@ -1,13 +1,22 @@
 package br.aeso.exercicio.cliente;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import br.aeso.exercicio.arquivos.ArquivosManager;
+
 public class RepositorioClienteHashMap implements IRepositorioCliente{
-	HashMap<Integer, Cliente> clientes = new HashMap<Integer, Cliente>();
-	
-	public RepositorioClienteHashMap() {
-		// TODO Auto-generated constructor stub
+	HashMap<Integer, Cliente> clientes;
+	private String file = "";
+	@SuppressWarnings("unchecked")
+	public RepositorioClienteHashMap() throws ClassNotFoundException, IOException {
+		ArquivosManager arquivos = new ArquivosManager();
+		if(arquivos.exists(file)){
+			this.clientes  = new HashMap<Integer, Cliente>();
+		}else{
+			this.clientes = (HashMap<Integer, Cliente>) arquivos.getValores(file);
+		}
 	}
 
 	public void cadastrar(Cliente cliente){
