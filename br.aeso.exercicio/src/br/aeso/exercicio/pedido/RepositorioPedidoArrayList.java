@@ -7,37 +7,47 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioPedidoArrayList implements IRepositorioPedido{
 	private ArrayList<Pedido> pedidos;
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/pedidosArrayList.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioPedidoArrayList() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
+			arquivos.createFile(this.file);
 			this.pedidos = new ArrayList<Pedido>();
 		}else{
 			this.pedidos = (ArrayList<Pedido>) arquivos.getValores(file);
 		}
 	}
-	public void cadastrar(Pedido pedido){
+	public void cadastrar(Pedido pedido) throws IOException{
 		if(this.pedidos.contains(pedido)){
 			return;
 		}
 		this.pedidos.add(pedido);
+		this.save();
+	}
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		ArrayList<Object> valores = new ArrayList<Object>();
+		valores.addAll(this.pedidos);
+		arquivos.saveValores(valores, this.file);
 	}
 	public ArrayList<Pedido> listar(){
 		return this.pedidos;
 	}
-	public boolean remover(Pedido pedido){
+	public boolean remover(Pedido pedido) throws IOException{
 		int index = this.pedidos.indexOf(pedido);
 		if(index == -1){
 			return false;
 		}
 		this.pedidos.remove(index);
+		this.save();
 		return true;
 	}
-	public boolean remover(double codigo){
+	public boolean remover(double codigo) throws IOException{
 		for(Pedido pedido : this.pedidos){
 			if(pedido.getCodigo() == codigo){
 				this.pedidos.remove(pedido);
+				this.save();
 				return true;
 			}
 		}
@@ -58,12 +68,13 @@ public class RepositorioPedidoArrayList implements IRepositorioPedido{
 		int index = this.pedidos.indexOf(pedido);
 		return this.pedidos.get(index);
 	}
-	public void atualizar(Pedido pedido){
+	public void atualizar(Pedido pedido) throws IOException{
 		if(!this.pedidos.contains(pedido)){
 			this.cadastrar(pedido);
 		}
 		int index = this.pedidos.indexOf(pedido);
 		this.pedidos.set(index, pedido);
+		this.save();
 	}
 	public ArrayList<Pedido> procurar(int codigoNotaFiscal){
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
@@ -76,5 +87,12 @@ public class RepositorioPedidoArrayList implements IRepositorioPedido{
 			return null;
 		}
 		return pedidos;
+	}
+	public double getNextId(){
+		if(this.pedidos.size() == 0){
+			return 1;
+		}
+		Pedido pedido = this.pedidos.get(this.pedidos.size() -1);
+		return pedido.getCodigo() + 1;
 	}
 }

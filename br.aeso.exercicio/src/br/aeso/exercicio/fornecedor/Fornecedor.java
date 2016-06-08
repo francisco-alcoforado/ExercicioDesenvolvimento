@@ -1,6 +1,12 @@
 package br.aeso.exercicio.fornecedor;
 
-public class Fornecedor {
+import java.io.Serializable;
+
+public class Fornecedor implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private String nome;
 	private String cnpj;

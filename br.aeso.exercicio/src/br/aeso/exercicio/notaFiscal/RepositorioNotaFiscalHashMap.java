@@ -9,36 +9,45 @@ import br.aeso.exercicio.fornecedor.Fornecedor;
 
 public class RepositorioNotaFiscalHashMap implements IRepositorioNotaFiscal{
 	HashMap<Integer, NotaFiscal> notaFiscals;
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/notaFiscalHashMap.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioNotaFiscalHashMap() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
+			arquivos.createFile(this.file);
 			this.notaFiscals = new HashMap<Integer, NotaFiscal>();
 		}else{
 			this.notaFiscals = (HashMap<Integer, NotaFiscal>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(NotaFiscal notaFiscal){
+	public void cadastrar(NotaFiscal notaFiscal) throws IOException{
 		if(this.notaFiscals.containsKey(notaFiscal.getCodigo())){
 			return;
 		}
 		this.notaFiscals.put(notaFiscal.getCodigo(), notaFiscal);
+		this.save();
 	}
-	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		HashMap<Integer, Object> valores = new HashMap<Integer, Object>();
+		valores.putAll(this.notaFiscals);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		if(!this.notaFiscals.containsKey(codigo)){
 			return false;
 		}
 		this.notaFiscals.remove(codigo);
-		return false;
+		this.save();
+		return true;
 	}
-	public boolean remover(Fornecedor notaFiscal){
+	public boolean remover(Fornecedor notaFiscal) throws IOException{
 		if(!this.notaFiscals.containsKey(notaFiscal.getCodigo())){
 			return false;
 		}
 		this.notaFiscals.remove(notaFiscal.getCodigo());
+		this.save();
 		return true;
 	}
 	public ArrayList<NotaFiscal> listar(){
@@ -58,11 +67,17 @@ public class RepositorioNotaFiscalHashMap implements IRepositorioNotaFiscal{
 		}
 		return this.notaFiscals.get(notaFiscal.getCodigo());
 	}
-	public void atualizar(NotaFiscal notaFiscal){
+	public void atualizar(NotaFiscal notaFiscal) throws IOException{
 		if(!this.notaFiscals.containsKey(notaFiscal.getCodigo())){
 			this.cadastrar(notaFiscal);
 		}
 		this.notaFiscals.replace(notaFiscal.getCodigo(), notaFiscal);
+		this.save();
 	}
-
+	public double getNextId(){
+		if(this.notaFiscals.size() == 0){
+			return 1;
+		}
+		return this.notaFiscals.size() + 1;
+	}
 }

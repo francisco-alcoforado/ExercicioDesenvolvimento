@@ -28,7 +28,7 @@ public class ControladorFornecedor {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(Fornecedor fornecedor) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException{
+	public void cadastrar(Fornecedor fornecedor) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException, IOException{
 		//Imprimir as informações do cliente.
 		if(fornecedor == null){
 			throw new IllegalArgumentException();
@@ -44,14 +44,14 @@ public class ControladorFornecedor {
 		
 		this.repositorio.cadastrar(fornecedor);
 	}
-	public void atualizar(Fornecedor fornecedor) throws CNPJInvalidoException{
+	public void atualizar(Fornecedor fornecedor) throws CNPJInvalidoException, IOException{
 		if(ValidarCNPJ.CNPJ(fornecedor.getCnpj()) == false){
 			throw new CNPJInvalidoException();
 		}
 		
 		this.repositorio.atualizar(fornecedor);
 	}
-	public boolean remover(String codigo) throws FornecedorNaoEncontradoException{
+	public boolean remover(String codigo) throws FornecedorNaoEncontradoException, IOException{
 		double dbCodigo = Double.parseDouble(codigo);
 		boolean retorno = this.repositorio.remover(dbCodigo);
 		if(retorno == false){
@@ -70,5 +70,8 @@ public class ControladorFornecedor {
 	public ArrayList<Fornecedor> listar(){
 		ArrayList<Fornecedor> lista = this.repositorio.listar();
 		return lista;
+	}
+	public double getNextId(){
+		return this.repositorio.getNextId();
 	}
 }

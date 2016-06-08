@@ -26,7 +26,7 @@ public class ControladorPedido {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(Pedido pedido) throws IllegalArgumentException, PedidoJaCadastradoException, PedidoNaoEncontradoException{
+	public void cadastrar(Pedido pedido) throws IllegalArgumentException, PedidoJaCadastradoException, PedidoNaoEncontradoException, IOException{
 		//Imprimir as informações do cliente.
 		if(pedido == null){
 			throw new IllegalArgumentException();
@@ -38,10 +38,10 @@ public class ControladorPedido {
 		
 		this.repositorio.cadastrar(pedido);
 	}
-	public void atualizar(Pedido pedido){
+	public void atualizar(Pedido pedido) throws IOException{
 		this.repositorio.atualizar(pedido);
 	}
-	public boolean remover(String codigo) throws PedidoNaoEncontradoException{
+	public boolean remover(String codigo) throws PedidoNaoEncontradoException, IOException{
 		double dbCodigo = Double.parseDouble(codigo);
 		boolean retorno = this.repositorio.remover(dbCodigo);
 		if(retorno == false){
@@ -67,5 +67,8 @@ public class ControladorPedido {
 	public ArrayList<Pedido> listar(){
 		ArrayList<Pedido> lista = this.repositorio.listar();
 		return lista;
+	}
+	public double getNextId(){
+		return this.repositorio.getNextId();
 	}
 }

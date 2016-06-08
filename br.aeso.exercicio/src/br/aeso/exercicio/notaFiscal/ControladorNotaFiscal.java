@@ -27,7 +27,7 @@ public class ControladorNotaFiscal {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(NotaFiscal notaFiscal) throws IllegalArgumentException, NotaFiscalJaCadastradaException, NotaFiscalNaoEncontradaException{
+	public void cadastrar(NotaFiscal notaFiscal) throws IllegalArgumentException, NotaFiscalJaCadastradaException, NotaFiscalNaoEncontradaException, IOException{
 		//Imprimir as informações do cliente.
 		if(notaFiscal == null){
 			throw new IllegalArgumentException();
@@ -39,10 +39,10 @@ public class ControladorNotaFiscal {
 		
 		this.repositorio.cadastrar(notaFiscal);
 	}
-	public void atualizar(NotaFiscal notaFiscal){
+	public void atualizar(NotaFiscal notaFiscal) throws IOException{
 		this.repositorio.atualizar(notaFiscal);
 	}
-	public boolean remover(String codigo) throws NotaFiscalNaoEncontradaException{
+	public boolean remover(String codigo) throws NotaFiscalNaoEncontradaException, IOException{
 		double dbCodigo = Double.parseDouble(codigo);
 		boolean retorno = this.repositorio.remover(dbCodigo);
 		if(retorno == false){
@@ -61,5 +61,8 @@ public class ControladorNotaFiscal {
 	public ArrayList<NotaFiscal> listar(){
 		ArrayList<NotaFiscal> lista = this.repositorio.listar();
 		return lista;
+	}
+	public double getNextId(){
+		return this.repositorio.getNextId();
 	}
 }

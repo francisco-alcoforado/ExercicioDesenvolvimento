@@ -95,6 +95,10 @@ public class Fachada {
 		ArrayList<Cliente> clientes = this.controladorCliente.listar();
 		return clientes;
 	}
+	public double getNextIdCliente() throws ClassNotFoundException, IOException{
+		this.controladorCliente = new ControladorCliente("ArrayList");
+		return this.controladorCliente.getNextId();
+	}
 	
 	public void cadastrarFornecedor(Fornecedor fornecedor) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException, ClassNotFoundException, IOException{
 		this.controladorFornecedor = new ControladorFornecedor(this.type);
@@ -118,6 +122,10 @@ public class Fachada {
 		this.controladorFornecedor = new ControladorFornecedor(this.type);
 		ArrayList<Fornecedor> lista = this.controladorFornecedor.listar();
 		return lista;
+	}
+	public double getNextIdFornecedor() throws ClassNotFoundException, IOException{
+		this.controladorFornecedor = new ControladorFornecedor("ArrayList");
+		return this.controladorFornecedor.getNextId();
 	}
 	
 	public void cadastrarProduto(Produto produto) throws IllegalArgumentException, ProdutoJaCadastradoException, ProdutoNaoEncontradoException, ClassNotFoundException, IOException{
@@ -143,6 +151,10 @@ public class Fachada {
 		ArrayList<Produto> lista = this.controladorProduto.listar();
 		return lista;
 	}
+	public double getNextIdProduto() throws ClassNotFoundException, IOException{
+		this.controladorProduto = new ControladorProduto("ArrayList");
+		return this.controladorProduto.getNextId();
+	}
 	
 	public void cadastrarPedido(Pedido pedido) throws IllegalArgumentException, PedidoJaCadastradoException, PedidoNaoEncontradoException, ClassNotFoundException, IOException{
 		this.controladorPedido = new ControladorPedido(this.type);
@@ -167,6 +179,10 @@ public class Fachada {
 		ArrayList<Pedido> lista = this.controladorPedido.listar();
 		return lista;
 	}
+	public double getNextIdPedido() throws ClassNotFoundException, IOException{
+		this.controladorPedido = new ControladorPedido("ArrayList");
+		return this.controladorPedido.getNextId();
+	}
 	
 	public void cadastrarNotaFiscal(NotaFiscal notaFiscal) throws IllegalArgumentException, NotaFiscalJaCadastradaException, NotaFiscalNaoEncontradaException, ClassNotFoundException, IOException{
 		this.controladorNotaFiscal = new ControladorNotaFiscal(this.type);
@@ -190,5 +206,9 @@ public class Fachada {
 		this.controladorNotaFiscal = new ControladorNotaFiscal(this.type);
 		ArrayList<NotaFiscal> lista = this.controladorNotaFiscal.listar();
 		return lista;
+	}
+	public double getNextIdNotaFiscal() throws ClassNotFoundException, IOException{
+		this.controladorNotaFiscal = new ControladorNotaFiscal("ArrayList");
+		return this.controladorNotaFiscal.getNextId();
 	}
 }

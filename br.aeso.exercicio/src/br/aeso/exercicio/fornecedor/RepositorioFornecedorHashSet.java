@@ -9,38 +9,49 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioFornecedorHashSet implements IRepositorioFornecedor{
 	HashSet<Fornecedor> fornecedores = new HashSet<Fornecedor>();
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/fornecedoresHashSet.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioFornecedorHashSet() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
 			this.fornecedores = new HashSet<Fornecedor>();
+			arquivos.createFile(this.file);
+			this.save();
 		}else{
 			this.fornecedores = (HashSet<Fornecedor>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(Fornecedor fornecedor){
+	public void cadastrar(Fornecedor fornecedor) throws IOException{
 		if(this.fornecedores.contains(fornecedor)){
 			return;
 		}
 		this.fornecedores.add(fornecedor);
+		this.save();
 	}
-	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		HashSet<Object> valores = new HashSet<Object>();
+		valores.addAll(this.fornecedores);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		for(Fornecedor fornecedor : this.fornecedores){
 			if(fornecedor.getCodigo() == codigo){
 				this.fornecedores.remove(fornecedor);
+				this.save();
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean remover(Fornecedor fornecedor){
+	public boolean remover(Fornecedor fornecedor) throws IOException{
 		if(!this.fornecedores.contains(fornecedor)){
 			return false;
 		}
-		return this.fornecedores.remove(fornecedor);
+		this.fornecedores.remove(fornecedor);
+		this.save();
+		return true;
 	}
 	
 	public ArrayList<Fornecedor> listar(){
@@ -67,7 +78,7 @@ public class RepositorioFornecedorHashSet implements IRepositorioFornecedor{
 		}
 		return null;
 	}
-	public void atualizar(Fornecedor fornecedor){
+	public void atualizar(Fornecedor fornecedor) throws IOException{
 		if(!this.fornecedores.contains(fornecedor)){
 			this.cadastrar(fornecedor);
 		}
@@ -77,6 +88,13 @@ public class RepositorioFornecedorHashSet implements IRepositorioFornecedor{
 				this.fornecedores.add(fornecedor);
 			}
 		}
+		this.save();
+	}
+	public double getNextId(){
+		if(this.fornecedores.size() == 0){
+			return 1;
+		}
+		return this.fornecedores.size() + 1;
 	}
 
 }

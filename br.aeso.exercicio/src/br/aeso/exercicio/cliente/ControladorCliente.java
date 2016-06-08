@@ -26,7 +26,7 @@ public class ControladorCliente {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(Cliente cliente) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException{
+	public void cadastrar(Cliente cliente) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException, IOException{
 		if(cliente == null){
 			throw new IllegalArgumentException();
 		}
@@ -39,13 +39,13 @@ public class ControladorCliente {
 		//Imprimir as informações do cliente.
 		this.repositorio.cadastrar(cliente);
 	}
-	public void atualizar(Cliente cliente) throws CPFInvalidoException{
+	public void atualizar(Cliente cliente) throws CPFInvalidoException, IOException{
 		if(ValidarCPF.CPF(cliente.getCpf()) == false){
 			throw new CPFInvalidoException();
 		}
 		this.repositorio.atualizar(cliente);
 	}
-	public boolean remover(int codigo) throws ClienteNaoExncontradoException{
+	public boolean remover(int codigo) throws ClienteNaoExncontradoException, IOException{
 		boolean retorno = this.repositorio.remover(codigo);
 		if(retorno == false){
 			throw new ClienteNaoExncontradoException();
@@ -64,5 +64,8 @@ public class ControladorCliente {
 	public ArrayList<Cliente> listar(){
 		ArrayList<Cliente> lista = new ArrayList<Cliente>();
 		return lista;
+	}
+	public double getNextId(){
+		return this.repositorio.getNextId();
 	}
 }

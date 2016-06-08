@@ -1,6 +1,7 @@
 package br.aeso.exercicio.notaFiscal;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import br.aeso.exercicio.cliente.Cliente;
@@ -10,7 +11,11 @@ import br.aeso.exercicio.pedido.ControladorPedido;
 import br.aeso.exercicio.pedido.Pedido;
 import br.aeso.exercicio.pedido.PedidoNaoEncontradoException;
 
-public class NotaFiscal {
+public class NotaFiscal implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private String dataEmissao;
 	private Cliente cliente;

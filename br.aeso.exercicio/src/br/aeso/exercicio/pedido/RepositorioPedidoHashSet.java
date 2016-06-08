@@ -9,38 +9,49 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioPedidoHashSet implements IRepositorioPedido{
 	HashSet<Pedido> pedidos = new HashSet<Pedido>();
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/pedidosHashSet.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioPedidoHashSet() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
+			arquivos.createFile(this.file);
 			this.pedidos = new HashSet<Pedido>();
 		}else{
 			this.pedidos = (HashSet<Pedido>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(Pedido pedido){
+	public void cadastrar(Pedido pedido) throws IOException{
 		if(this.pedidos.contains(pedido)){
 			return;
 		}
 		this.pedidos.add(pedido);
+		this.save();
 	}
-	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		HashSet<Object> valores = new HashSet<Object>();
+		valores.addAll(this.pedidos);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		for(Pedido pedido : this.pedidos){
 			if(pedido.getCodigo() == codigo){
 				this.pedidos.remove(pedido);
+				this.save();
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean remover(Pedido pedido){
+	public boolean remover(Pedido pedido) throws IOException{
 		if(!this.pedidos.contains(pedido)){
 			return false;
 		}
-		return this.pedidos.remove(pedido);
+		this.pedidos.remove(pedido);
+		this.save();
+		return true;
+		
 	}
 	
 	public ArrayList<Pedido> listar(){
@@ -67,7 +78,7 @@ public class RepositorioPedidoHashSet implements IRepositorioPedido{
 		}
 		return null;
 	}
-	public void atualizar(Pedido pedido){
+	public void atualizar(Pedido pedido) throws IOException{
 		if(!this.pedidos.contains(pedido)){
 			this.cadastrar(pedido);
 		}
@@ -77,6 +88,7 @@ public class RepositorioPedidoHashSet implements IRepositorioPedido{
 				this.pedidos.add(pedido);
 			}
 		}
+		this.save();
 	}
 	public ArrayList<br.aeso.exercicio.pedido.Pedido> procurar(int codigoNotaFiscal) {
 		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
@@ -89,5 +101,11 @@ public class RepositorioPedidoHashSet implements IRepositorioPedido{
 			return null;
 		}
 		return pedidos;
+	}
+	public double getNextId(){
+		if(this.pedidos.size() == 0){
+			return 1;
+		}
+		return this.pedidos.size() + 1;
 	}
 }

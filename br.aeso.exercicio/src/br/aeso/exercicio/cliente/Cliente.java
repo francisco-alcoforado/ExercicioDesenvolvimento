@@ -1,6 +1,12 @@
 package br.aeso.exercicio.cliente;
 
-public class Cliente {
+import java.io.Serializable;
+
+public class Cliente implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private String nome;
 	private String cpf;

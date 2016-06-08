@@ -26,22 +26,18 @@ public class ControladorProduto {
 		this.repositorio = repositorio;
 	}
 
-	public void cadastrar(Produto produto) throws IllegalArgumentException, ProdutoJaCadastradoException, ProdutoNaoEncontradoException{
+	public void cadastrar(Produto produto) throws IllegalArgumentException, ProdutoJaCadastradoException, ProdutoNaoEncontradoException, IOException{
 		//Imprimir as informações do cliente.
 		if(produto == null){
 			throw new IllegalArgumentException();
 		}
 		
-		if(this.procurar("" + produto.getCodigo()) != null){
-			throw new ProdutoJaCadastradoException();
-		}
-		
 		this.repositorio.cadastrar(produto);
 	}
-	public void atualizar(Produto produto){
+	public void atualizar(Produto produto) throws IOException{
 		this.repositorio.atualizar(produto);
 	}
-	public boolean remover(String codigo) throws ProdutoNaoEncontradoException{
+	public boolean remover(String codigo) throws ProdutoNaoEncontradoException, IOException{
 		double dbCodigo = Double.parseDouble(codigo);
 		boolean retorno = this.repositorio.remover(dbCodigo);
 		if(retorno == false){
@@ -60,5 +56,8 @@ public class ControladorProduto {
 	public ArrayList<Produto> listar(){
 		ArrayList<Produto> lista = this.repositorio.listar();
 		return lista;
+	}
+	public double getNextId(){
+		return this.repositorio.getNextId();
 	}
 }

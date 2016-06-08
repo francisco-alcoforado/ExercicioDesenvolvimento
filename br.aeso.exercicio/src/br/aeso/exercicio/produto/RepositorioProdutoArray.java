@@ -8,31 +8,38 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioProdutoArray implements IRepositorioProduto{
 	Produto produtos[] =  new Produto[1];
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/produtosArray.tmp";
 	public RepositorioProdutoArray() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
 			this.produtos = new Produto[1];
 		}else{
 			this.produtos = (Produto[]) arquivos.getArray(file);
 		}
 	}
-	public void cadastrar(Produto produto){
+	public void cadastrar(Produto produto) throws IOException{
 		//Imprimir dados do cliente a ser cadastrado
 		System.out.println(produto.toString());
 		int tamanho = this.produtos.length;
 		this.produtos = Arrays.copyOf(this.produtos, this.produtos.length + 1);
 		this.produtos[tamanho - 1] = produto;
+		this.save();
 	}
-	public void atualizar(Produto produto){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		arquivos.createFile(this.file);
+		arquivos.saveArray(this.produtos, this.file);
+	}
+	public void atualizar(Produto produto) throws IOException{
 		for(int i = 0; i < this.produtos.length; i++){
 			if(this.produtos[i].getCodigo() == produto.getCodigo()){
 				this.produtos[i] = produto;
+				this.save();
 				break;
 			}
 		}
 	}
-	public boolean remover(double codigo){
+	public boolean remover(double codigo) throws IOException{
 		Produto newProdutos[] = new Produto[this.produtos.length - 1];
 		int x = 0;
 		
@@ -44,6 +51,7 @@ public class RepositorioProdutoArray implements IRepositorioProduto{
 				newProdutos[x++] = this.produtos[i];
 			}
 		}
+		this.save();
 		return true;
 	}
 	public Produto procurar(double codigo){
@@ -57,5 +65,12 @@ public class RepositorioProdutoArray implements IRepositorioProduto{
 	public ArrayList<Produto> listar(){
 		ArrayList<Produto> produtos = new ArrayList<Produto>(Arrays.asList(this.produtos));
 		return produtos;
+	}
+	public double getNextId(){
+		if(this.produtos.length == 0){
+			return 1;
+		}
+		Produto produto = this.produtos[this.produtos.length - 1];
+		return produto.getCodigo() + 1;
 	}
 }

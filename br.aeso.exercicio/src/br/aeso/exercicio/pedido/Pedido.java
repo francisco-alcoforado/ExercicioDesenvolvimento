@@ -1,6 +1,12 @@
 package br.aeso.exercicio.pedido;
 
-public class Pedido {
+import java.io.Serializable;
+
+public class Pedido implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private int quantidade;
 	private double valorProduto;

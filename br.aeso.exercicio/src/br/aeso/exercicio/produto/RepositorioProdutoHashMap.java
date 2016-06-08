@@ -8,36 +8,45 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioProdutoHashMap implements IRepositorioProduto{
 	HashMap<Integer, Produto> produtos;
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/produtosHashMap.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioProdutoHashMap() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
 			this.produtos = new HashMap<Integer, Produto>();
 		}else{
 			this.produtos = (HashMap<Integer, Produto>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(Produto produto){
+	public void cadastrar(Produto produto) throws IOException{
 		if(this.produtos.containsKey(produto.getCodigo())){
 			return;
 		}
 		this.produtos.put(produto.getCodigo(), produto);
+		this.save();
 	}
-	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		arquivos.createFile(this.file);
+		HashMap<Integer, Object> valores = new HashMap<Integer, Object>();
+		valores.putAll(this.produtos);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		if(!this.produtos.containsKey(codigo)){
 			return false;
 		}
 		this.produtos.remove(codigo);
-		return false;
+		this.save();
+		return true;
 	}
-	public boolean remover(Produto produto){
+	public boolean remover(Produto produto) throws IOException{
 		if(!this.produtos.containsKey(produto.getCodigo())){
 			return false;
 		}
 		this.produtos.remove(produto.getCodigo());
+		this.save();
 		return true;
 	}
 	public ArrayList<Produto> listar(){
@@ -57,10 +66,17 @@ public class RepositorioProdutoHashMap implements IRepositorioProduto{
 		}
 		return this.produtos.get(produto.getCodigo());
 	}
-	public void atualizar(Produto produto){
+	public void atualizar(Produto produto) throws IOException{
 		if(!this.produtos.containsKey(produto.getCodigo())){
 			this.cadastrar(produto);
 		}
 		this.produtos.replace(produto.getCodigo(), produto);
+		this.save();
+	}
+	public double getNextId(){
+		if(this.produtos.size() == 0){
+			return 1;
+		}
+		return this.produtos.size() + 1;
 	}
 }

@@ -10,37 +10,47 @@ import br.aeso.exercicio.fornecedor.Fornecedor;
 
 public class RepositorioClienteHashSet implements IRepositorioCliente{
 	HashSet<Cliente> clientes;
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/clientesHashSet.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioClienteHashSet() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
 			this.clientes = new HashSet<Cliente>();
+			arquivos.createFile(this.file);
+			this.save();
 		}else{
 			this.clientes = (HashSet<Cliente>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(Cliente cliente){
+	public void cadastrar(Cliente cliente) throws IOException{
 		if(this.clientes.contains(cliente)){
 			return;
 		}
 		this.clientes.add(cliente);
+		this.save();
 	}
-	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		HashSet<Object> valores = new HashSet<Object>();
+		valores.addAll(this.clientes);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		for(Cliente cliente : this.clientes){
 			if(cliente.getCodigo() == codigo){
 				this.clientes.remove(cliente);
+				this.save();
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean remover(Cliente cliente){
+	public boolean remover(Cliente cliente) throws IOException{
 		if(!this.clientes.contains(cliente)){
 			return false;
 		}
+		this.save();
 		return this.clientes.remove(cliente);
 	}
 	
@@ -68,7 +78,7 @@ public class RepositorioClienteHashSet implements IRepositorioCliente{
 		}
 		return null;
 	}
-	public void atualizar(Cliente cliente){
+	public void atualizar(Cliente cliente) throws IOException{
 		if(!this.clientes.contains(cliente)){
 			this.cadastrar(cliente);
 		}
@@ -78,7 +88,12 @@ public class RepositorioClienteHashSet implements IRepositorioCliente{
 				this.clientes.add(cliente);
 			}
 		}
+		this.save();
 	}
-
-
+	public double getNextId(){
+		if(this.clientes.size() == 0){
+			return 1;
+		}
+		return this.clientes.size() + 1;
+	}
 }

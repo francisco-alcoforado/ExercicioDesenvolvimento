@@ -9,38 +9,49 @@ import br.aeso.exercicio.arquivos.ArquivosManager;
 
 public class RepositorioNotaFiscalHashSet implements IRepositorioNotaFiscal{
 	HashSet<NotaFiscal> notaFiscals = new HashSet<NotaFiscal>();
-	private String file = "";
+	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/notaFiscalHashSet.tmp";
 	@SuppressWarnings("unchecked")
 	public RepositorioNotaFiscalHashSet() throws ClassNotFoundException, IOException {
 		ArquivosManager arquivos = new ArquivosManager();
-		if(arquivos.exists(file)){
+		if(!arquivos.exists(this.file)){
+			arquivos.createFile(this.file);
 			this.notaFiscals = new HashSet<NotaFiscal>();
 		}else{
 			this.notaFiscals = (HashSet<NotaFiscal>) arquivos.getValores(file);
 		}
 	}
 
-	public void cadastrar(NotaFiscal notaFiscal){
+	public void cadastrar(NotaFiscal notaFiscal) throws IOException{
 		if(this.notaFiscals.contains(notaFiscal)){
 			return;
 		}
 		this.notaFiscals.add(notaFiscal);
+		this.save();
 	}
 	
-	public boolean remover(double codigo){
+	private void save() throws IOException{
+		ArquivosManager arquivos = new ArquivosManager();
+		HashSet<Object> valores = new HashSet<Object>();
+		valores.addAll(this.notaFiscals);
+		arquivos.saveValores(valores, this.file);
+	}
+	public boolean remover(double codigo) throws IOException{
 		for(NotaFiscal notaFiscal : this.notaFiscals){
 			if(notaFiscal.getCodigo() == codigo){
 				this.notaFiscals.remove(notaFiscal);
+				this.save();
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean remover(NotaFiscal notaFiscal){
+	public boolean remover(NotaFiscal notaFiscal) throws IOException{
 		if(!this.notaFiscals.contains(notaFiscal)){
 			return false;
 		}
-		return this.notaFiscals.remove(notaFiscal);
+		this.notaFiscals.remove(notaFiscal);
+		this.save();
+		return true;
 	}
 	
 	public ArrayList<NotaFiscal> listar(){
@@ -67,7 +78,7 @@ public class RepositorioNotaFiscalHashSet implements IRepositorioNotaFiscal{
 		}
 		return null;
 	}
-	public void atualizar(NotaFiscal notaFiscal){
+	public void atualizar(NotaFiscal notaFiscal) throws IOException{
 		if(!this.notaFiscals.contains(notaFiscal)){
 			this.cadastrar(notaFiscal);
 		}
@@ -77,6 +88,13 @@ public class RepositorioNotaFiscalHashSet implements IRepositorioNotaFiscal{
 				this.notaFiscals.add(notaFiscal);
 			}
 		}
+		this.save();
+	}
+	public double getNextId(){
+		if(this.notaFiscals.size() == 0){
+			return 1;
+		}
+		return this.notaFiscals.size() + 1;
 	}
 
 }
