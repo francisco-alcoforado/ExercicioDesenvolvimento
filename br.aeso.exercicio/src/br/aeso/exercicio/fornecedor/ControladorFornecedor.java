@@ -1,24 +1,16 @@
 package br.aeso.exercicio.fornecedor;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import br.aeso.exercicio.util.CNPJInvalidoException;
-import br.aeso.exercicio.util.ValidarCNPJ;
 
 public class ControladorFornecedor {
 	private IRepositorioFornecedor repositorio;
 	
-	public ControladorFornecedor(String type) throws ClassNotFoundException, IOException {
-		if(type.equals("array")){
-			this.repositorio = new RepositorioFornecedorArray();
-		}else if(type.equals("ArrayList")){
-			this.repositorio = new RepositorioFornecedorArrayList();
-		}else if(type.equals("HashMap")){
-			this.repositorio = new RepositorioFornecedorHashMap();
-		}else if(type.equals("HashSet")){
-			this.repositorio = new RepositorioFornecedorHashSet();
-		}
+	public ControladorFornecedor() throws ClassNotFoundException, IOException, SQLException {
+		this.repositorio = new RepositorioFornecedorArrayList();
 	}
 	
 	public IRepositorioFornecedor getRepositorio() {
@@ -38,16 +30,9 @@ public class ControladorFornecedor {
 			throw new FornecedorJaCadastradoException();
 		}
 		
-		if(ValidarCNPJ.CNPJ(fornecedor.getCnpj()) == false){
-			throw new CNPJInvalidoException();
-		}
-		
 		this.repositorio.cadastrar(fornecedor);
 	}
 	public void atualizar(Fornecedor fornecedor) throws CNPJInvalidoException, IOException{
-		if(ValidarCNPJ.CNPJ(fornecedor.getCnpj()) == false){
-			throw new CNPJInvalidoException();
-		}
 		
 		this.repositorio.atualizar(fornecedor);
 	}
@@ -70,8 +55,5 @@ public class ControladorFornecedor {
 	public ArrayList<Fornecedor> listar(){
 		ArrayList<Fornecedor> lista = this.repositorio.listar();
 		return lista;
-	}
-	public double getNextId(){
-		return this.repositorio.getNextId();
 	}
 }

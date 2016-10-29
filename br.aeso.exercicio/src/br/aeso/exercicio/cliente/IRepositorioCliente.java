@@ -9,5 +9,4 @@ public interface IRepositorioCliente {
 	public boolean remover(double codigo) throws IOException;
 	public Cliente procurar(double codigo);
 	public ArrayList<Cliente> listar();
-	public double getNextId();
 }

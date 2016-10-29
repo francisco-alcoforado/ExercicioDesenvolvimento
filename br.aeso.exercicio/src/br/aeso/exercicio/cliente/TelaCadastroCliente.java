@@ -24,7 +24,14 @@ public class TelaCadastroCliente {
 		String nome = teclado.nextLine();
 		System.out.println("Insira o cpf: ");
 		String cpf = teclado.nextLine();
-		Cliente cliente = new Cliente(codigo, nome, cpf);
+		String complemento = "";
+		int numero = 0;
+		String rua = "";
+		String bairro= "";
+		String cidade = ""; 
+		String CEP = "";
+		Cliente cliente = new Cliente(codigo, nome, cpf, rua, bairro, cidade, CEP,
+				numero, complemento);
 		return cliente;
 	}
 }

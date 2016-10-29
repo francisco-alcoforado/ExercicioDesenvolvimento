@@ -9,5 +9,4 @@ public interface IRepositorioFornecedor {
 	public boolean remover(double codigo) throws IOException;
 	public Fornecedor procurar(double codigo);
 	public ArrayList<Fornecedor> listar();
-	public double getNextId();
 }

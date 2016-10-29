@@ -1,39 +1,36 @@
 package br.aeso.exercicio.fornecedor;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-import br.aeso.exercicio.arquivos.ArquivosManager;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RepositorioFornecedorArrayList implements IRepositorioFornecedor{
 	private ArrayList<Fornecedor> fornecedores;
-	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/fornecedoresArrayList.tmp";
-	@SuppressWarnings("unchecked")
-	public RepositorioFornecedorArrayList() throws ClassNotFoundException, IOException {
-		ArquivosManager arquivos = new ArquivosManager();
-		if(!arquivos.exists(this.file)){
-			this.fornecedores = new ArrayList<Fornecedor>();
-			arquivos.createFile(this.file);
-			this.save();
-		}else{
-			this.fornecedores = (ArrayList<Fornecedor>) arquivos.getValores(file);
-		}
+	private ConnectarDBFornecedor banco;
+	public RepositorioFornecedorArrayList() throws ClassNotFoundException, IOException, SQLException {
+		this.banco = new ConnectarDBFornecedor();
 	}
 	
 	public void cadastrar(Fornecedor fornecedor) throws IOException{
 		if(this.fornecedores.contains(fornecedor)){
 			return;
 		}
-		this.fornecedores.add(fornecedor);
-		this.save();
-	}
-	private void save() throws IOException{
-		ArquivosManager arquivos = new ArquivosManager();
-		ArrayList<Object> valores = new ArrayList<Object>();
-		valores.addAll(this.fornecedores);
-		arquivos.saveValores(valores, this.file);
+		try {
+			this.banco.cadastrar(fornecedor);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public ArrayList<Fornecedor> listar(){
+		try {
+			this.fornecedores = this.banco.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this.fornecedores;
 	}
 	public boolean remover(Fornecedor fornecedor) throws IOException{
@@ -41,48 +38,66 @@ public class RepositorioFornecedorArrayList implements IRepositorioFornecedor{
 		if(index == -1){
 			return false;
 		}
-		this.fornecedores.remove(index);
-		this.save();
+		try {
+			this.banco.remover(fornecedor);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listar();
 		return true;
 	}
 	public boolean remover(double codigo) throws IOException{
 		for(Fornecedor fornecedor : this.fornecedores){
 			if(fornecedor.getCodigo() == codigo){
-				this.fornecedores.remove(fornecedor);
-				this.save();
+				try {
+					this.banco.remover(fornecedor);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.listar();
 				return true;
 			}
 		}
 		return false;
 	}
 	public Fornecedor procurar(double codigo){
-		for(Fornecedor fornecedor : this.fornecedores){
-			if(fornecedor.getCodigo() == codigo){
-				return fornecedor;
-			}
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", codigo);
+		ArrayList<Fornecedor> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+		Fornecedor fornecedor = lista.get(0);
+		return fornecedor;
 	}
 	public Fornecedor procurar(Fornecedor fornecedor){
-		if(!this.fornecedores.contains(fornecedor)){
-			return null;
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", fornecedor.getCodigo());
+		ArrayList<Fornecedor> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		int index = this.fornecedores.indexOf(fornecedor);
-		return this.fornecedores.get(index);
+		Fornecedor fornecedorResp = lista.get(0);
+		return fornecedorResp;
 	}
 	public void atualizar(Fornecedor fornecedor) throws IOException{
 		if(!this.fornecedores.contains(fornecedor)){
 			this.cadastrar(fornecedor);
 		}
-		int index = this.fornecedores.indexOf(fornecedor);
-		this.fornecedores.set(index, fornecedor);
-		this.save();
-	}
-	public double getNextId(){
-		if(this.fornecedores.size() == 0){
-			return 1;
+		try {
+			this.banco.atualizar(fornecedor);
+			this.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Fornecedor fornecedor = this.fornecedores.get(this.fornecedores.size() -1);
-		return fornecedor.getCodigo() + 1;
 	}
 }

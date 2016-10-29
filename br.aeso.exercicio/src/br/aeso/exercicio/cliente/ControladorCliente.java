@@ -1,6 +1,7 @@
 package br.aeso.exercicio.cliente;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import br.aeso.exercicio.util.CPFInvalidoException;
@@ -8,16 +9,8 @@ import br.aeso.exercicio.util.ValidarCPF;
 
 public class ControladorCliente {
 	private IRepositorioCliente repositorio;
-	public ControladorCliente(String type) throws ClassNotFoundException, IOException {
-		if(type.equals("array")){
-			this.repositorio = new RepositorioClienteArray();
-		}else if(type.equals("ArrayList")){
-			this.repositorio = new RepositorioClienteArrayList();
-		}else if(type.equals("HashMap")){
-			this.repositorio = new RepositorioClienteHashMap();
-		}else if(type.equals("HashSet")){
-			this.repositorio = new RepositorioClienteHashSet();
-		}
+	public ControladorCliente() throws ClassNotFoundException, IOException, SQLException {
+		this.repositorio = new RepositorioClienteArrayList();
 	}
 	public IRepositorioCliente getRepositorio() {
 		return repositorio;
@@ -64,8 +57,5 @@ public class ControladorCliente {
 	public ArrayList<Cliente> listar(){
 		ArrayList<Cliente> lista = new ArrayList<Cliente>();
 		return lista;
-	}
-	public double getNextId(){
-		return this.repositorio.getNextId();
 	}
 }

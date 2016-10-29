@@ -1,6 +1,7 @@
 package br.aeso.exercicio.fachada;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import br.aeso.exercicio.cliente.*;
 import br.aeso.exercicio.fornecedor.ControladorFornecedor;
@@ -21,6 +22,10 @@ import br.aeso.exercicio.produto.ProdutoJaCadastradoException;
 import br.aeso.exercicio.produto.ProdutoNaoEncontradoException;
 import br.aeso.exercicio.util.CNPJInvalidoException;
 import br.aeso.exercicio.util.CPFInvalidoException;
+import br.aeso.exercicio.vendedor.ControladorVendedor;
+import br.aeso.exercicio.vendedor.Vendedor;
+import br.aeso.exercicio.vendedor.VendedorJaCadastradoException;
+import br.aeso.exercicio.vendedor.VendedorNaoEncontradoException;
 
 public class Fachada {
 	private String type;
@@ -29,10 +34,22 @@ public class Fachada {
 	private ControladorPedido controladorPedido;
 	private ControladorProduto controladorProduto;
 	private ControladorNotaFiscal controladorNotaFiscal;
+	private ControladorVendedor controladorVendedor;
 	public Fachada(String type) {
 		this.type = type;
 	}
 	
+	
+	public ControladorVendedor getControladorVendedor() {
+		return controladorVendedor;
+	}
+
+
+	public void setControladorVendedor(ControladorVendedor controladorVendedor) {
+		this.controladorVendedor = controladorVendedor;
+	}
+
+
 	public ControladorCliente getControladorCliente() {
 		return controladorCliente;
 	}
@@ -72,60 +89,77 @@ public class Fachada {
 	}
 	
 
-	public void cadastrarCliente(Cliente cliente) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException, ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente(this.type);
+	public void cadastrarCliente(Cliente cliente) throws IllegalArgumentException, CPFInvalidoException, ClienteJaCadastradoException, ClienteNaoExncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorCliente = new ControladorCliente();
 		this.controladorCliente.cadastrar(cliente);
 	}
-	public void atualizarCliente(Cliente cliente) throws CPFInvalidoException, ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente(this.type);
+	public void atualizarCliente(Cliente cliente) throws CPFInvalidoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorCliente = new ControladorCliente();
 		this.controladorCliente.atualizar(cliente);
 	}
-	public boolean removerCliente(int codigo) throws ClienteNaoExncontradoException, ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente(this.type);
+	public boolean removerCliente(int codigo) throws ClienteNaoExncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorCliente = new ControladorCliente();
 		boolean retorno = this.controladorCliente.remover(codigo);
 		return retorno;
 	}
-	public Cliente procurarCliente(int codigo) throws ClienteNaoExncontradoException, ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente(this.type);
+	public Cliente procurarCliente(int codigo) throws ClienteNaoExncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorCliente = new ControladorCliente();
 		Cliente cliente = this.controladorCliente.procurar(codigo);
 		return cliente;
 	}
-	public ArrayList<Cliente> listarCliente() throws ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente(this.type);
+	public ArrayList<Cliente> listarCliente() throws ClassNotFoundException, IOException, SQLException{
+		this.controladorCliente = new ControladorCliente();
 		ArrayList<Cliente> clientes = this.controladorCliente.listar();
 		return clientes;
 	}
-	public double getNextIdCliente() throws ClassNotFoundException, IOException{
-		this.controladorCliente = new ControladorCliente("ArrayList");
-		return this.controladorCliente.getNextId();
+    
+	public void cadastrarVendedor(Vendedor vendedor) throws IllegalArgumentException, ClassNotFoundException, IOException, SQLException, VendedorJaCadastradoException, VendedorNaoEncontradoException{
+		this.controladorVendedor = new ControladorVendedor();
+		this.controladorVendedor.cadastrar(vendedor);
+	}
+	public void atualizarVendedor(Vendedor vendedor) throws CPFInvalidoException, ClassNotFoundException, IOException, SQLException, VendedorNaoEncontradoException{
+		this.controladorVendedor = new ControladorVendedor();
+		this.controladorVendedor.atualizar(vendedor);
+	}
+	public boolean removerVendedor(int codigo) throws ClassNotFoundException, IOException, SQLException, ClienteNaoExncontradoException{
+		this.controladorVendedor = new ControladorVendedor();
+		boolean retorno = this.controladorCliente.remover(codigo);
+		return retorno;
+	}
+	public Vendedor procurarVendedor(int codigo) throws ClassNotFoundException, IOException, SQLException, VendedorNaoEncontradoException{
+		this.controladorVendedor = new ControladorVendedor();
+		Vendedor vendedor = this.controladorVendedor.procurar(codigo);
+		return vendedor;
+	}
+	public ArrayList<Vendedor> listarVendedor() throws ClassNotFoundException, IOException, SQLException{
+		this.controladorVendedor = new ControladorVendedor();
+		ArrayList<Vendedor> vendedores = this.controladorVendedor.listar();
+		return vendedores;
 	}
 	
-	public void cadastrarFornecedor(Fornecedor fornecedor) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException, ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor(this.type);
+	
+	public void cadastrarFornecedor(Fornecedor fornecedor) throws IllegalArgumentException, FornecedorJaCadastradoException, CNPJInvalidoException, FornecedorNaoEncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorFornecedor = new ControladorFornecedor();
 		this.controladorFornecedor.cadastrar(fornecedor);
 	}
-	public void atualizarFornecedor(Fornecedor fornecedor) throws FornecedorNaoEncontradoException, CNPJInvalidoException, ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor(this.type);
+	public void atualizarFornecedor(Fornecedor fornecedor) throws FornecedorNaoEncontradoException, CNPJInvalidoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorFornecedor = new ControladorFornecedor();
 		this.controladorFornecedor.atualizar(fornecedor);
 	}
-	public boolean removerFornecedor(String codigo) throws FornecedorNaoEncontradoException, ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor(this.type);
+	public boolean removerFornecedor(String codigo) throws FornecedorNaoEncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorFornecedor = new ControladorFornecedor();
 		boolean retorno = this.controladorFornecedor.remover(codigo);
 		return retorno;
 	}
-	public Fornecedor procurarFornecedor(String codigo) throws FornecedorNaoEncontradoException, ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor(this.type);
+	public Fornecedor procurarFornecedor(String codigo) throws FornecedorNaoEncontradoException, ClassNotFoundException, IOException, SQLException{
+		this.controladorFornecedor = new ControladorFornecedor();
 		Fornecedor fornecedor = this.controladorFornecedor.procurar(codigo);
 		return fornecedor;
 	}
-	public ArrayList<Fornecedor> listarFornecedor() throws ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor(this.type);
+	public ArrayList<Fornecedor> listarFornecedor() throws ClassNotFoundException, IOException, SQLException{
+		this.controladorFornecedor = new ControladorFornecedor();
 		ArrayList<Fornecedor> lista = this.controladorFornecedor.listar();
 		return lista;
-	}
-	public double getNextIdFornecedor() throws ClassNotFoundException, IOException{
-		this.controladorFornecedor = new ControladorFornecedor("ArrayList");
-		return this.controladorFornecedor.getNextId();
 	}
 	
 	public void cadastrarProduto(Produto produto) throws IllegalArgumentException, ProdutoJaCadastradoException, ProdutoNaoEncontradoException, ClassNotFoundException, IOException{

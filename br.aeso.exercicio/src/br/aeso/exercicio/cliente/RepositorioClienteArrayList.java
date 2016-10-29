@@ -1,40 +1,37 @@
 package br.aeso.exercicio.cliente;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-import br.aeso.exercicio.arquivos.ArquivosManager;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RepositorioClienteArrayList implements IRepositorioCliente{
 	private ArrayList<Cliente> clientes;
-	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/clientesArrayList.tmp";
-	@SuppressWarnings("unchecked")
-	public RepositorioClienteArrayList() throws ClassNotFoundException, IOException {
-		ArquivosManager arquivos = new ArquivosManager();
-		if(!arquivos.exists(this.file)){
-			this.clientes = new ArrayList<Cliente>();
-			arquivos.createFile(this.file);
-			this.save();
-		}else{
-			this.clientes = (ArrayList<Cliente>) arquivos.getValores(file);
-		}
+	private ConnectarDBCliente banco;
+	public RepositorioClienteArrayList() throws ClassNotFoundException, IOException, SQLException {
+		this.banco = new ConnectarDBCliente();
 	}
 	
 	public void cadastrar(Cliente cliente) throws IOException{
 		if(this.clientes.contains(cliente)){
 			return;
 		}
-		this.clientes.add(cliente);
-		this.save();
-	}
-	private void save() throws IOException{
-		ArquivosManager arquivos = new ArquivosManager();
-		ArrayList<Object> valores = new ArrayList<Object>();
-		valores.addAll(this.clientes);
-		arquivos.saveValores(valores, this.file);
+		try {
+			this.banco.cadastrar(cliente);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public ArrayList<Cliente> listar(){
+		try {
+			this.clientes = this.banco.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this.clientes;
 	}
 	public boolean remover(Cliente cliente)  throws ClienteNaoExncontradoException, IOException{
@@ -42,42 +39,68 @@ public class RepositorioClienteArrayList implements IRepositorioCliente{
 		if(index == -1){
 			throw new ClienteNaoExncontradoException();
 		}
-		this.clientes.remove(index);
-		this.save();
+		try {
+			this.banco.remover(cliente);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listar();
 		return true;
 	}
 	public boolean remover(double codigo) throws IOException{
 		for(Cliente cliente : this.clientes){
 			if(cliente.getCodigo() == codigo){
-				this.clientes.remove(cliente);
-				this.save();
+				try {
+					this.banco.remover(cliente);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.listar();
 				return true;
 			}
 		}
 		return false;
 	}
 	public Cliente procurar(double codigo){
-		for(Cliente cliente : this.clientes){
-			if(cliente.getCodigo() == codigo){
-				return cliente;
-			}
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", codigo);
+		ArrayList<Cliente> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+		Cliente cliente = lista.get(0);
+		return cliente;
+		
 	}
 	public Cliente procurar(Cliente cliente){
-		if(!this.clientes.contains(cliente)){
-			return null;
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", cliente.getCodigo());
+		ArrayList<Cliente> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		int index = this.clientes.indexOf(cliente);
-		return this.clientes.get(index);
+		Cliente clienteResp = lista.get(0);
+		return clienteResp;
 	}
 	public void atualizar(Cliente cliente) throws IOException{
 		if(!this.clientes.contains(clientes)){
 			this.cadastrar(cliente);
 		}
-		int index = this.clientes.indexOf(cliente);
-		this.clientes.set(index, cliente);
-		this.save();
+		try {
+			this.banco.atualizar(cliente);
+			this.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public double getNextId(){
 		if(this.clientes.size() == 0){
