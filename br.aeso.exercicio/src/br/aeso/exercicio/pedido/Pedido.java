@@ -1,93 +1,58 @@
 package br.aeso.exercicio.pedido;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import br.aeso.exercicio.cliente.Cliente;
+import br.aeso.exercicio.vendedor.Vendedor;
 
 public class Pedido implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int codigo;
-	private int quantidade;
-	private double valorProduto;
-	private double valorTotal;
-	private int codigoProduto;
-	private int codigoVendedor;
-	private int codigoCliente;
-	private String dataPedido;
-	private int codigoNotaFiscal;
-	public Pedido(int codigo, int quantidade, double valorProduto, double valorTotal, int codigoProduto,
-			int codigoVendedor, int codigoCliente, String dataPedido, int codigoNotaFiscal) {
+	private int Codigo;
+	private Cliente cliente;
+	private Vendedor vendedor;
+	private double valor;
+	private Date data_pedido;
+	public Pedido(int codigo, Cliente cliente, Vendedor vendedor, double valor, Date data_pedido) {
 		super();
-		this.codigo = codigo;
-		this.quantidade = quantidade;
-		this.valorProduto = valorProduto;
-		this.valorTotal = valorTotal;
-		this.codigoProduto = codigoProduto;
-		this.codigoVendedor = codigoVendedor;
-		this.codigoCliente = codigoCliente;
-		this.dataPedido = dataPedido;
-		this.codigoNotaFiscal = codigoNotaFiscal;
+		Codigo = codigo;
+		this.cliente = cliente;
+		this.vendedor = vendedor;
+		this.valor = valor;
+		this.data_pedido = data_pedido;
 	}
 	public int getCodigo() {
-		return codigo;
+		return Codigo;
 	}
 	public void setCodigo(int codigo) {
-		this.codigo = codigo;
+		Codigo = codigo;
 	}
-	public int getQuantidade() {
-		return quantidade;
+	public Cliente getCliente() {
+		return cliente;
 	}
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
-	public double getValorProduto() {
-		return valorProduto;
+	public Vendedor getVendedor() {
+		return vendedor;
 	}
-	public void setValorProduto(double valorProduto) {
-		this.valorProduto = valorProduto;
+	public void setVendedor(Vendedor vendedor) {
+		this.vendedor = vendedor;
 	}
-	public double getValorTotal() {
-		return valorTotal;
+	public double getValor() {
+		return valor;
 	}
-	public void setValorTotal(double valorTotal) {
-		this.valorTotal = valorTotal;
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
-	public int getCodigoProduto() {
-		return codigoProduto;
+	public Date getData_pedido() {
+		return data_pedido;
 	}
-	public void setCodigoProduto(int codigoProduto) {
-		this.codigoProduto = codigoProduto;
-	}
-	public int getCodigoVendedor() {
-		return codigoVendedor;
-	}
-	public void setCodigoVendedor(int codigoVendedor) {
-		this.codigoVendedor = codigoVendedor;
-	}
-	public int getCodigoCliente() {
-		return codigoCliente;
-	}
-	public void setCodigoCliente(int codigoCliente) {
-		this.codigoCliente = codigoCliente;
-	}
-	public String getDataPedido() {
-		return dataPedido;
-	}
-	public void setDataPedido(String dataPedido) {
-		this.dataPedido = dataPedido;
-	}
-	public int getCodigoNotaFiscal() {
-		return codigoNotaFiscal;
-	}
-	public void setCodigoNotaFiscal(int codigoNotaFiscal) {
-		this.codigoNotaFiscal = codigoNotaFiscal;
+	public void setData_pedido(Date data_pedido) {
+		this.data_pedido = data_pedido;
 	}
 	@Override
 	public String toString() {
-		return "Pedido [codigo=" + codigo + ", quantidade=" + quantidade + ", valorProduto=" + valorProduto
-				+ ", valorTotal=" + valorTotal + ", codigoProduto=" + codigoProduto + ", codigoVendedor="
-				+ codigoVendedor + ", codigoCliente=" + codigoCliente + ", dataPedido=" + dataPedido
-				+ ", codigoNotaFiscal=" + codigoNotaFiscal + "]";
+		return "Pedido [Codigo=" + Codigo + ", cliente=" + cliente + ", vendedor=" + vendedor + ", valor=" + valor
+				+ ", data_pedido=" + data_pedido + "]";
 	}
 }
