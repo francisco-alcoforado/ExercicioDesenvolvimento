@@ -102,10 +102,4 @@ public class RepositorioClienteArrayList implements IRepositorioCliente{
 			e.printStackTrace();
 		}
 	}
-	public double getNextId(){
-		if(this.clientes.size() == 0){
-			return 1;
-		}
-		return this.clientes.get(this.clientes.size() - 1).getCodigo() + 1;
-	}
 }

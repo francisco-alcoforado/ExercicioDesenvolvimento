@@ -1,21 +1,14 @@
 package br.aeso.exercicio.notaFiscal;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ControladorNotaFiscal {
 	private IRepositorioNotaFiscal repositorio;
 	
-	public ControladorNotaFiscal(String type) throws ClassNotFoundException, IOException {
-		if(type.equals("array")){
-			this.repositorio = new RepositorioNotaFiscalArray();
-		}else if(type.equals("ArrayList")){
-			this.repositorio = new RepositorioNotaFiscalArrayList();
-		}else if(type.equals("HashMap")){
-			this.repositorio = new RepositorioNotaFiscalHashMap();
-		}else if(type.equals("HashSet")){
-			this.repositorio = new RepositorioNotaFiscalHashSet();
-		}
+	public ControladorNotaFiscal() throws ClassNotFoundException, IOException, SQLException {
+		this.repositorio = new RepositorioNotaFiscalArrayList();
 	}
 	
 	public IRepositorioNotaFiscal getRepositorio() {
@@ -33,7 +26,7 @@ public class ControladorNotaFiscal {
 			throw new IllegalArgumentException();
 		}
 		
-		if(this.procurar("" + notaFiscal.getCodigo()) != null){
+		if(this.procurar(notaFiscal.getCodigo()) != null){
 			throw new NotaFiscalJaCadastradaException();
 		}
 		
@@ -42,17 +35,15 @@ public class ControladorNotaFiscal {
 	public void atualizar(NotaFiscal notaFiscal) throws IOException{
 		this.repositorio.atualizar(notaFiscal);
 	}
-	public boolean remover(String codigo) throws NotaFiscalNaoEncontradaException, IOException{
-		double dbCodigo = Double.parseDouble(codigo);
-		boolean retorno = this.repositorio.remover(dbCodigo);
+	public boolean remover(int codigo) throws NotaFiscalNaoEncontradaException, IOException{
+		boolean retorno = this.repositorio.remover(codigo);
 		if(retorno == false){
 			throw new NotaFiscalNaoEncontradaException();
 		}
 		return retorno;
 	}
-	public NotaFiscal procurar(String codigo) throws NotaFiscalNaoEncontradaException{
-		double dbCodigo = Double.parseDouble(codigo);
-		NotaFiscal fornecedor = this.repositorio.procurar(dbCodigo);
+	public NotaFiscal procurar(int codigo) throws NotaFiscalNaoEncontradaException{
+		NotaFiscal fornecedor = this.repositorio.procurar(codigo);
 		if(fornecedor == null){
 			throw new NotaFiscalNaoEncontradaException();
 		}
@@ -61,8 +52,5 @@ public class ControladorNotaFiscal {
 	public ArrayList<NotaFiscal> listar(){
 		ArrayList<NotaFiscal> lista = this.repositorio.listar();
 		return lista;
-	}
-	public double getNextId(){
-		return this.repositorio.getNextId();
 	}
 }

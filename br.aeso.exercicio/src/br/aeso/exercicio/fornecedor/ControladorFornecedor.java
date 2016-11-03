@@ -26,7 +26,7 @@ public class ControladorFornecedor {
 			throw new IllegalArgumentException();
 		}
 		
-		if(this.procurar("" + fornecedor.getCodigo()) != null){
+		if(this.procurar(fornecedor.getCodigo()) != null){
 			throw new FornecedorJaCadastradoException();
 		}
 		
@@ -44,9 +44,8 @@ public class ControladorFornecedor {
 		}
 		return retorno;
 	}
-	public Fornecedor procurar(String codigo) throws FornecedorNaoEncontradoException{
-		double dbCodigo = Double.parseDouble(codigo);
-		Fornecedor fornecedor = this.repositorio.procurar(dbCodigo);
+	public Fornecedor procurar(int codigo) throws FornecedorNaoEncontradoException{
+		Fornecedor fornecedor = this.repositorio.procurar(codigo);
 		if(fornecedor == null){
 			throw new FornecedorNaoEncontradoException();
 		}

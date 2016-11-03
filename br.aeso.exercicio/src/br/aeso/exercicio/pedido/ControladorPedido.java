@@ -1,21 +1,14 @@
 package br.aeso.exercicio.pedido;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ControladorPedido {
 	private IRepositorioPedido repositorio;
 	
-	public ControladorPedido(String type) throws ClassNotFoundException, IOException {
-		if(type.equals("array")){
-			this.repositorio = new RepositorioPedidoArray();
-		}else if(type.equals("ArrayList")){
-			this.repositorio = new RepositorioPedidoArrayList();
-		}else if(type.equals("HashMap")){
-			this.repositorio = new RepositorioPedidoHashMap();
-		}else if(type.equals("HashSet")){
-			this.repositorio = new RepositorioPedidoHashSet();
-		}
+	public ControladorPedido() throws ClassNotFoundException, IOException, SQLException {
+		this.repositorio = new RepositorioPedidoArrayList();
 	}
 	
 	public IRepositorioPedido getRepositorio() {
@@ -32,7 +25,7 @@ public class ControladorPedido {
 			throw new IllegalArgumentException();
 		}
 		
-		if(this.procurar("" + pedido.getCodigo()) != null){
+		if(this.procurar(pedido.getCodigo()) != null){
 			throw new PedidoJaCadastradoException();
 		}
 		
@@ -49,26 +42,15 @@ public class ControladorPedido {
 		}
 		return retorno;
 	}
-	public Pedido procurar(String codigo) throws PedidoNaoEncontradoException{
-		double dbCodigo = Double.parseDouble(codigo);
-		Pedido pedido = this.repositorio.procurar(dbCodigo);
+	public Pedido procurar(int codigo) throws PedidoNaoEncontradoException{
+		Pedido pedido = this.repositorio.procurar(codigo);
 		if(pedido == null){
 			throw new PedidoNaoEncontradoException();
 		}
 		return pedido;
 	}
-	public ArrayList<Pedido> procurar(int codigoNotaFiscal) throws PedidoNaoEncontradoException{
-		ArrayList<Pedido> pedidos = this.repositorio.procurar(codigoNotaFiscal);
-		if(pedidos == null){
-			throw new PedidoNaoEncontradoException();
-		}
-		return pedidos;
-	}
 	public ArrayList<Pedido> listar(){
 		ArrayList<Pedido> lista = this.repositorio.listar();
 		return lista;
-	}
-	public double getNextId(){
-		return this.repositorio.getNextId();
 	}
 }

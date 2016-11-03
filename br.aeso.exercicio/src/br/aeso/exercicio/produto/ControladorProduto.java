@@ -1,21 +1,14 @@
 package br.aeso.exercicio.produto;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ControladorProduto {
 	private IRepositorioProduto repositorio;
 	
-	public ControladorProduto(String type) throws ClassNotFoundException, IOException {
-		if(type.equals("array")){
-			this.repositorio = new RepositorioProdutoArray();
-		}else if(type.equals("ArrayList")){
-			this.repositorio = new RepositorioProdutoArrayList();
-		}else if(type.equals("HashMap")){
-			this.repositorio = new RepositorioProdutoHashMap();
-		}else if(type.equals("HashSet")){
-			this.repositorio = new RepositorioProdutoHashSet();
-		}
+	public ControladorProduto() throws ClassNotFoundException, IOException, SQLException {
+		this.repositorio = new RepositorioProdutoArrayList();
 	}
 	
 	public IRepositorioProduto getRepositorio() {
@@ -37,17 +30,15 @@ public class ControladorProduto {
 	public void atualizar(Produto produto) throws IOException{
 		this.repositorio.atualizar(produto);
 	}
-	public boolean remover(String codigo) throws ProdutoNaoEncontradoException, IOException{
-		double dbCodigo = Double.parseDouble(codigo);
-		boolean retorno = this.repositorio.remover(dbCodigo);
+	public boolean remover(int codigo) throws ProdutoNaoEncontradoException, IOException{
+		boolean retorno = this.repositorio.remover(codigo);
 		if(retorno == false){
 			throw new ProdutoNaoEncontradoException();
 		}
 		return retorno;
 	}
-	public Produto procurar(String codigo) throws ProdutoNaoEncontradoException{
-		double dbCodigo = Double.parseDouble(codigo);
-		Produto fornecedor = this.repositorio.procurar(dbCodigo);
+	public Produto procurar(int codigo) throws ProdutoNaoEncontradoException{
+		Produto fornecedor = this.repositorio.procurar(codigo);
 		if(fornecedor == null){
 			throw new ProdutoNaoEncontradoException();
 		}
@@ -56,8 +47,5 @@ public class ControladorProduto {
 	public ArrayList<Produto> listar(){
 		ArrayList<Produto> lista = this.repositorio.listar();
 		return lista;
-	}
-	public double getNextId(){
-		return this.repositorio.getNextId();
 	}
 }

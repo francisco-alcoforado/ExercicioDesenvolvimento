@@ -1,22 +1,20 @@
 package br.aeso.exercicio.produto;
 
-import java.io.Serializable;
+import br.aeso.exercicio.fornecedor.Fornecedor;
 
-public class Produto implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class Produto{
 	private int codigo;
 	private String nome;
-	private double preco;
+	private double valor;
 	private String categoria;
-	public Produto(int codigo, String nome, double preco, String categoria) {
+	private Fornecedor fornecedor;
+	public Produto(int codigo, String nome, double valor, String categoria, Fornecedor fornecedor) {
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
-		this.preco = preco;
+		this.valor = valor;
 		this.categoria = categoria;
+		this.fornecedor = fornecedor;
 	}
 	public int getCodigo() {
 		return codigo;
@@ -30,11 +28,11 @@ public class Produto implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public double getPreco() {
-		return preco;
+	public double getValor() {
+		return valor;
 	}
-	public void setPreco(double preco) {
-		this.preco = preco;
+	public void setValor(double valor) {
+		this.valor = valor;
 	}
 	public String getCategoria() {
 		return categoria;
@@ -42,8 +40,18 @@ public class Produto implements Serializable{
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
+	public Fornecedor getFornecedor() {
+		return fornecedor;
+	}
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
 	@Override
 	public String toString() {
-		return "Produto [codigo=" + codigo + ", nome=" + nome + ", preco=" + preco + ", categoria=" + categoria + "]";
+		return "Produto [codigo=" + codigo + ", nome=" + nome + ", valor=" + valor + ", categoria=" + categoria
+				+ ", fornecedor=" + fornecedor + "]";
 	}
+	
+	
+	
 }

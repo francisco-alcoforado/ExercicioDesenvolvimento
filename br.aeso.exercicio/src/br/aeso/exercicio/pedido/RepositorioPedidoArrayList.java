@@ -1,98 +1,142 @@
 package br.aeso.exercicio.pedido;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-import br.aeso.exercicio.arquivos.ArquivosManager;
+import java.util.HashMap;
+import java.util.Map;
+import br.aeso.exercicio.cliente.ClienteNaoExncontradoException;
+import br.aeso.exercicio.vendedor.VendedorNaoEncontradoException;
 
 public class RepositorioPedidoArrayList implements IRepositorioPedido{
 	private ArrayList<Pedido> pedidos;
-	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/pedidosArrayList.tmp";
-	@SuppressWarnings("unchecked")
-	public RepositorioPedidoArrayList() throws ClassNotFoundException, IOException {
-		ArquivosManager arquivos = new ArquivosManager();
-		if(!arquivos.exists(this.file)){
-			arquivos.createFile(this.file);
-			this.pedidos = new ArrayList<Pedido>();
-		}else{
-			this.pedidos = (ArrayList<Pedido>) arquivos.getValores(file);
-		}
+	private ConnectarDBPedido banco;
+	public RepositorioPedidoArrayList() throws ClassNotFoundException, IOException, SQLException {
+		this.banco = new ConnectarDBPedido();
 	}
-	public void cadastrar(Pedido pedido) throws IOException{
+	
+	public void cadastrar(Pedido pedido){
 		if(this.pedidos.contains(pedido)){
 			return;
 		}
-		this.pedidos.add(pedido);
-		this.save();
-	}
-	private void save() throws IOException{
-		ArquivosManager arquivos = new ArquivosManager();
-		ArrayList<Object> valores = new ArrayList<Object>();
-		valores.addAll(this.pedidos);
-		arquivos.saveValores(valores, this.file);
+		try {
+			this.banco.cadastrar(pedido);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public ArrayList<Pedido> listar(){
+		try {
+			this.pedidos = this.banco.listar();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClienteNaoExncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VendedorNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this.pedidos;
 	}
-	public boolean remover(Pedido pedido) throws IOException{
+	public boolean remover(Pedido pedido)  throws PedidoNaoEncontradoException, IOException{
 		int index = this.pedidos.indexOf(pedido);
 		if(index == -1){
-			return false;
+			throw new PedidoNaoEncontradoException();
 		}
-		this.pedidos.remove(index);
-		this.save();
+		try {
+			this.banco.remover(pedido);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listar();
 		return true;
 	}
-	public boolean remover(double codigo) throws IOException{
+	public boolean remover(double codigo){
 		for(Pedido pedido : this.pedidos){
 			if(pedido.getCodigo() == codigo){
-				this.pedidos.remove(pedido);
-				this.save();
+				try {
+					this.banco.remover(pedido);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.listar();
 				return true;
 			}
 		}
 		return false;
 	}
 	public Pedido procurar(double codigo){
-		for(Pedido pedido : this.pedidos){
-			if(pedido.getCodigo() == codigo){
-				return pedido;
-			}
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", codigo);
+		ArrayList<Pedido> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClienteNaoExncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VendedorNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+		Pedido pedido = lista.get(0);
+		return pedido;
+		
 	}
 	public Pedido procurar(Pedido pedido){
-		if(!this.pedidos.contains(pedido)){
-			return null;
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", pedido.getCodigo());
+		ArrayList<Pedido> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClienteNaoExncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (VendedorNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		int index = this.pedidos.indexOf(pedido);
-		return this.pedidos.get(index);
+		Pedido pedidoResp = lista.get(0);
+		return pedidoResp;
 	}
-	public void atualizar(Pedido pedido) throws IOException{
-		if(!this.pedidos.contains(pedido)){
+	public void atualizar(Pedido pedido){
+		if(!this.pedidos.contains(pedidos)){
 			this.cadastrar(pedido);
 		}
-		int index = this.pedidos.indexOf(pedido);
-		this.pedidos.set(index, pedido);
-		this.save();
-	}
-	public ArrayList<Pedido> procurar(int codigoNotaFiscal){
-		ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
-		for(Pedido pedido : this.pedidos){
-			if(pedido.getCodigoNotaFiscal() == codigoNotaFiscal){
-				pedidos.add(pedido);
-			}
+		try {
+			this.banco.atualizar(pedido);
+			this.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		if(pedidos.isEmpty()){
-			return null;
-		}
-		return pedidos;
-	}
-	public double getNextId(){
-		if(this.pedidos.size() == 0){
-			return 1;
-		}
-		Pedido pedido = this.pedidos.get(this.pedidos.size() -1);
-		return pedido.getCodigo() + 1;
 	}
 }

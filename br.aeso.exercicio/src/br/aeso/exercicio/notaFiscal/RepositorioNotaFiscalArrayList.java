@@ -1,87 +1,137 @@
 package br.aeso.exercicio.notaFiscal;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import br.aeso.exercicio.arquivos.ArquivosManager;
+import br.aeso.exercicio.notaFiscal.NotaFiscal;
+import br.aeso.exercicio.notaFiscal.NotaFiscalNaoEncontradaException;
+import br.aeso.exercicio.pedido.PedidoNaoEncontradoException;
+import br.aeso.exercicio.notaFiscal.ConnectarDBNotaFiscal;
 
 public class RepositorioNotaFiscalArrayList implements IRepositorioNotaFiscal{
-	private ArrayList<NotaFiscal> notaFiscales;
-	private String file = "C:/Users/lab01/git/ExercicioDesenvolvimento/br.aeso.exercicio/arquivos/notaFiscalArrayList.tmp";
-	@SuppressWarnings("unchecked")
-	public RepositorioNotaFiscalArrayList() throws ClassNotFoundException, IOException {
-		ArquivosManager arquivos = new ArquivosManager();
-		if(!arquivos.exists(this.file)){
-			this.notaFiscales = new ArrayList<NotaFiscal>();
-		}else{
-			this.notaFiscales = (ArrayList<NotaFiscal>) arquivos.getValores(file);
-		}
+	private ArrayList<NotaFiscal> notaFiscals;
+	
+	private ConnectarDBNotaFiscal banco;
+	public RepositorioNotaFiscalArrayList() throws ClassNotFoundException, IOException, SQLException {
+		this.banco = new ConnectarDBNotaFiscal();
 	}
 	
-	public void cadastrar(NotaFiscal notaFiscal) throws IOException{
-		if(this.notaFiscales.contains(notaFiscal)){
+	public void cadastrar(NotaFiscal notaFiscal){
+		if(this.notaFiscals.contains(notaFiscal)){
 			return;
 		}
-		this.notaFiscales.add(notaFiscal);
-		this.save();
-	}
-	private void save() throws IOException{
-		ArquivosManager arquivos = new ArquivosManager();
-		arquivos.createFile(this.file);
-		ArrayList<Object> valores = new ArrayList<Object>();
-		valores.addAll(this.notaFiscales);
-		arquivos.saveValores(valores, this.file);
+		try {
+			this.banco.cadastrar(notaFiscal);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public ArrayList<NotaFiscal> listar(){
-		return this.notaFiscales;
-	}
-	public boolean remover(NotaFiscal notaFiscal) throws IOException{
-		int index = this.notaFiscales.indexOf(notaFiscal);
-		if(index == -1){
-			return false;
+		try {
+			this.notaFiscals = this.banco.listar();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PedidoNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		this.notaFiscales.remove(index);
-		this.save();
+		return this.notaFiscals;
+	}
+	public boolean remover(NotaFiscal notaFiscal)  throws NotaFiscalNaoEncontradaException, IOException{
+		int index = this.notaFiscals.indexOf(notaFiscal);
+		if(index == -1){
+			throw new NotaFiscalNaoEncontradaException();
+		}
+		try {
+			this.banco.remover(notaFiscal);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.listar();
 		return true;
 	}
-	public boolean remover(double codigo) throws IOException{
-		for(NotaFiscal notaFiscal : this.notaFiscales){
+	public boolean remover(int codigo){
+		for(NotaFiscal notaFiscal : this.notaFiscals){
 			if(notaFiscal.getCodigo() == codigo){
-				this.notaFiscales.remove(notaFiscal);
-				this.save();
+				try {
+					this.banco.remover(notaFiscal);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.listar();
 				return true;
 			}
 		}
 		return false;
 	}
-	public NotaFiscal procurar(double codigo){
-		for(NotaFiscal notaFiscal : this.notaFiscales){
-			if(notaFiscal.getCodigo() == codigo){
-				return notaFiscal;
-			}
+	public NotaFiscal procurar(int codigo){
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", codigo);
+		ArrayList<NotaFiscal> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PedidoNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+		NotaFiscal notaFiscal = lista.get(0);
+		return notaFiscal;
+		
 	}
 	public NotaFiscal procurar(NotaFiscal notaFiscal){
-		if(!this.notaFiscales.contains(notaFiscal)){
-			return null;
+		Map<String, Object> valores = new HashMap<String, Object>();
+		valores.put("Codigo", notaFiscal.getCodigo());
+		ArrayList<NotaFiscal> lista = null;
+		try {
+			lista = this.banco.procurar(valores);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PedidoNaoEncontradoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		int index = this.notaFiscales.indexOf(notaFiscal);
-		return this.notaFiscales.get(index);
+		NotaFiscal notaFiscalResp = lista.get(0);
+		return notaFiscalResp;
 	}
-	public void atualizar(NotaFiscal notaFiscal) throws IOException{
-		if(!this.notaFiscales.contains(notaFiscal)){
+	public void atualizar(NotaFiscal notaFiscal){
+		if(!this.notaFiscals.contains(notaFiscals)){
 			this.cadastrar(notaFiscal);
 		}
-		int index = this.notaFiscales.indexOf(notaFiscal);
-		this.notaFiscales.set(index, notaFiscal);
-		this.save();
-	}
-	public double getNextId(){
-		if(this.notaFiscales.size() == 0){
-			return 1;
+		try {
+			this.banco.atualizar(notaFiscal);
+			this.listar();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		NotaFiscal notaFiscal = this.notaFiscales.get(this.notaFiscales.size() -1);
-		return notaFiscal.getCodigo() + 1;
 	}
 }

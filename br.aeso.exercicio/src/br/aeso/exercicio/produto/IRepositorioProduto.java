@@ -9,5 +9,4 @@ public interface IRepositorioProduto {
 	public boolean remover(double codigo) throws IOException;
 	public Produto procurar(double codigo);
 	public ArrayList<Produto> listar();
-	public double getNextId();
 }

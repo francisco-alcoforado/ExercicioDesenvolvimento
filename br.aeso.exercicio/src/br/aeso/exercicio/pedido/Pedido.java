@@ -1,12 +1,11 @@
 package br.aeso.exercicio.pedido;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import br.aeso.exercicio.cliente.Cliente;
 import br.aeso.exercicio.vendedor.Vendedor;
 
-public class Pedido implements Serializable{
+public class Pedido{
 	private int Codigo;
 	private Cliente cliente;
 	private Vendedor vendedor;
